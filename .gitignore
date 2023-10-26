@@ -1,0 +1,4 @@
+qv/
+.env
+Pipfile
+Pipfile.lock
