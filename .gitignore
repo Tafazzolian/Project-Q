@@ -2,3 +2,4 @@ qv/
 .env
 Pipfile
 Pipfile.lock
+playground.py
