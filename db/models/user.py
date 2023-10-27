@@ -19,7 +19,8 @@ class User(Base):
     
     hashed_password = Column(String)
     two_factor_authentication =  Column(Boolean, nullable=True, default=False)
+    membership = Column(String(5),default="Free")
 
     shops   = relationship('Shop'  , back_populates='users')
-    qrcodes = relationship('QRCode', back_populates='users')
+    files = relationship('File', back_populates='users')
     ufo     = relationship('Ufo',    back_populates='users', uselist=False)

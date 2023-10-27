@@ -1,8 +1,8 @@
-"""Initial migration
+"""fixing database relations 3
 
-Revision ID: 4b31fa2b10b4
+Revision ID: bfb45a404fb3
 Revises: 
-Create Date: 2023-10-27 00:08:34.022250
+Create Date: 2023-10-27 21:12:42.615645
 
 """
 from typing import Sequence, Union
@@ -12,9 +12,8 @@ import sqlalchemy as sa
 from utils.custom_types import EncryptedType
 
 
-
 # revision identifiers, used by Alembic.
-revision: str = '4b31fa2b10b4'
+revision: str = 'bfb45a404fb3'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -33,6 +32,7 @@ def upgrade() -> None:
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('hashed_password', sa.String(), nullable=True),
     sa.Column('two_factor_authentication', sa.Boolean(), nullable=True),
+    sa.Column('membership', sa.String(length=5), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     schema='account'
     )
@@ -66,6 +66,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('s3_key', sa.String(), nullable=True),
     sa.Column('file_name', sa.String(), nullable=True),
+    sa.Column('link', sa.String(length=255), nullable=True),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),

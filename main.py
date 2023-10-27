@@ -1,10 +1,9 @@
 from fastapi import FastAPI
+from app.api import user
 
 app = FastAPI()
+app.include_router(user.router)
 
-@app.get("/")
-async def read_root():
-    return {"Initiationg Project Q"}
 
 if __name__ == "__main__":
     import uvicorn

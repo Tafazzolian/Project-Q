@@ -19,4 +19,6 @@ class Shop(Base):
 
     user_id = Column(Integer, ForeignKey('account.users.id'))
     
-    qrcodes = relationship('File', back_populates='shops')
+    files = relationship('File', back_populates='shops')
+    users = relationship('User', back_populates='shops')
+

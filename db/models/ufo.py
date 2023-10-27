@@ -14,4 +14,5 @@ class Ufo(Base):
 
     user_id       = Column(Integer, ForeignKey('account.users.id'))
 
-    user = relationship('User', back_populates='ufos')
+    users = relationship('User', back_populates='ufo')
+
