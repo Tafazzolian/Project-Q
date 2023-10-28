@@ -32,7 +32,7 @@ class GetUser(BaseModel):
 class CreateUser(BaseModel):
     first_name: str
     last_name: str
-    email: Optional[str]
+    email: Optional[str] = None
     mobile: str
     membership: str
     password: str

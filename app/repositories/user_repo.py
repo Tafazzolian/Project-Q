@@ -1,29 +1,21 @@
 from sqlalchemy.orm import Session
 from db.models.user import User
-import bcrypt
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi.responses import JSONResponse
 from fastapi import HTTPException, status
-from sqlalchemy import or_
+from sqlalchemy import or_, text
 
-def hash_password(password: str) -> str:
-    password_bytes = password.encode('utf-8')
-    # Generate a salt
-    salt = bcrypt.gensalt()
-    # Hash the password
-    hashed_password = bcrypt.hashpw(password_bytes, salt)
-    # Convert the hashed password back to a string for storage
-    return hashed_password.decode('utf-8')
 
-def check_password(stored_password: str, provided_password: str) -> bool:
-    password_match = bcrypt.checkpw(provided_password.encode('utf-8'), stored_password.encode('utf-8'))
-    return password_match
 
 class UserRepository:
     def __init__(self, db: Session):
         self.db = db
 
     def get_user(self,user_data):
+#         query = text("""
+# SELECT * FROM account.users WHERE id=1
+# """)
+#         user = self.db.execute(query).fetchone()
         conditions = []
         if "mobile" in user_data:
             conditions.append(User.mobile == user_data["mobile"])
@@ -31,11 +23,14 @@ class UserRepository:
             conditions.append(User.last_name == user_data["last_name"])
         if "user_id" in user_data:
             conditions.append(User.id == user_data["user_id"])
+        if "email" in user_data:
+            conditions.append(User.id == user_data["email"])
         
         if not conditions:
             return None  # or raise an exception if you prefer
         
         user = self.db.query(User).filter(or_(*conditions)).first()
+        
         return user
     
     def get_all_users(self):
@@ -48,7 +43,7 @@ class UserRepository:
             mobile=mobile,
             membership=membership,
             email=email,
-            hashed_password=hash_password(password)
+            hashed_password=User.hash_password(password)
         )
         self.db.add(user)
         try:
@@ -63,7 +58,7 @@ class UserRepository:
 
 
     def login_user(self, mobile, password, email=None):
-         user = self.db.query(User).filter(mobile=mobile,hash_password= check_password(password), email= email)
+         user = self.db.query(User).filter(mobile=mobile,hash_password= User.check_password(password), email= email)
          if not user:
               raise 'user not found'
          return 'we found ya'

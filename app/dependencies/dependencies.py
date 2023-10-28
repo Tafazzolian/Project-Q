@@ -1,4 +1,5 @@
 from fastapi import Depends, FastAPI
+from fastapi.security import OAuth2PasswordBearer
 from fastapi.exceptions import ValidationException
 from app.repositories.user_repo import UserRepository
 from app.services.user_services import UserService
@@ -12,7 +13,7 @@ from db import models
 from database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
-
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 app = FastAPI()
 
 def current_user(request: Request):
