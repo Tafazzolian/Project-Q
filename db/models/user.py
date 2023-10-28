@@ -22,5 +22,5 @@ class User(Base):
     membership = Column(String(5),default="Free")
 
     shops   = relationship('Shop'  , back_populates='users')
-    files = relationship('File', back_populates='users')
-    ufo     = relationship('Ufo',    back_populates='users', uselist=False)
+    files   = relationship('File', back_populates='users')
+    ufo     = relationship('Ufo',  back_populates='users', uselist=False)

@@ -1,5 +1,4 @@
 from typing import List, Optional
-from uuid import UUID
 
 from pydantic import BaseModel, validator
 
@@ -21,9 +20,9 @@ class LoginUser(BaseModel):
 
 
 class GetUser(BaseModel):
-    user_id: Optional[int]
-    mobile: Optional[str]
-    last_name: Optional[str]
+    user_id: Optional[int] = None
+    mobile: Optional[str] = None
+    last_name: Optional[str] = None
 
     @validator('mobile')
     def mobile_check(cls, v, values):

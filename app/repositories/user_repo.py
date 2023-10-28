@@ -4,6 +4,7 @@ import bcrypt
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi.responses import JSONResponse
 from fastapi import HTTPException, status
+from sqlalchemy import or_
 
 def hash_password(password: str) -> str:
     password_bytes = password.encode('utf-8')
@@ -15,14 +16,27 @@ def hash_password(password: str) -> str:
     return hashed_password.decode('utf-8')
 
 def check_password(stored_password: str, provided_password: str) -> bool:
-            return bcrypt.checkpw(provided_password.encode('utf-8'), stored_password.encode('utf-8'))
+    password_match = bcrypt.checkpw(provided_password.encode('utf-8'), stored_password.encode('utf-8'))
+    return password_match
 
 class UserRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_user(self):
-        return self.db.query(User).filter(User.mobile==None, User.last_name==None, User.id==None)
+    def get_user(self,user_data):
+        conditions = []
+        if "mobile" in user_data:
+            conditions.append(User.mobile == user_data["mobile"])
+        if "last_name" in user_data:
+            conditions.append(User.last_name == user_data["last_name"])
+        if "user_id" in user_data:
+            conditions.append(User.id == user_data["user_id"])
+        
+        if not conditions:
+            return None  # or raise an exception if you prefer
+        
+        user = self.db.query(User).filter(or_(*conditions)).first()
+        return user
     
     def get_all_users(self):
         return self.db.query(User).all()
