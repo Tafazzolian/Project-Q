@@ -15,8 +15,13 @@ class SendOtpRequestModel(BaseModel):
 
 class LoginUser(BaseModel):
     mobile: str
-    email: Optional[str]
+    email: Optional[str] = None
     password: str
+
+    @validator('mobile')
+    def mobile_check(cls, v, values):
+        PhoneNumberValidator("body.mobile", v).validate()
+        return v
 
 
 class GetUser(BaseModel):

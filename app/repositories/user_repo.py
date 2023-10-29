@@ -5,8 +5,6 @@ from fastapi.responses import JSONResponse
 from fastapi import HTTPException, status
 from sqlalchemy import or_, text
 
-
-
 class UserRepository:
     def __init__(self, db: Session):
         self.db = db
@@ -30,7 +28,6 @@ class UserRepository:
             return None  # or raise an exception if you prefer
         
         user = self.db.query(User).filter(or_(*conditions)).first()
-        
         return user
     
     def get_all_users(self):
@@ -57,10 +54,15 @@ class UserRepository:
                                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-    def login_user(self, mobile, password, email=None):
-         user = self.db.query(User).filter(mobile=mobile,hash_password= User.check_password(password), email= email)
-         if not user:
-              raise 'user not found'
-         return 'we found ya'
+    def login_user(self, user_data):
+        conditions = []
+        if "mobile" in user_data:
+            conditions.append(User.mobile == user_data["mobile"])
+        if "email" in user_data:
+            conditions.append(User.id == user_data["email"])
+
+        user = self.db.query(User).filter(or_(*conditions)).first()
+        return user
+        
         
 

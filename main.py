@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from app.api import user
+from app.middlewares.Authentication import AuthenticateMiddleware
 
 app = FastAPI()
+app.add_middleware(AuthenticateMiddleware)
 app.include_router(user.router)
 
 

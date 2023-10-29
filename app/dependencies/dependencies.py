@@ -1,25 +1,15 @@
-from fastapi import Depends, FastAPI
-from fastapi.security import OAuth2PasswordBearer
-from fastapi.exceptions import ValidationException
+from fastapi import Depends
 from app.repositories.user_repo import UserRepository
 from app.services.user_services import UserService
-from typing import Any
+from typing import Any, Optional
 from sqlalchemy.orm import Session
 from fastapi.params import Query
-from sqlalchemy import desc
 from starlette.requests import Request
+from config.Auth import AccessToken
 
 from db import models
 from database import SessionLocal, engine
-
 models.Base.metadata.create_all(bind=engine)
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-app = FastAPI()
-
-def current_user(request: Request):
-    if request.state.user is None:
-        raise ValidationException()
-    return request.state.user
 
 def get_db():
     db = SessionLocal()
@@ -28,11 +18,39 @@ def get_db():
     finally:
         db.close()
 
-def get_user_repository(db: Session = Depends(get_db)) -> UserRepository:
+def inject_session_to_repo(db: Session = Depends(get_db)) -> UserRepository:
     """
     Provides an instance of UserRepository to be used as a dependency.
     """
     return UserRepository(db)
 
-def get_user_service(repo: UserRepository = Depends(get_user_repository)) -> UserService:
+
+def get_user_service(repo: UserRepository = Depends(inject_session_to_repo)) -> UserService:
     return UserService(repo)
+
+
+def get_current_user(request: Request, token: Optional[str] = None) -> str:
+    if not token:
+        token = request.state.token
+    user_id = AccessToken().check_token(token)
+    return user_id
+    
+
+def already_logged_in_check(request:Request):
+    if not request.state.token:
+        print("login_check: no tokens found")
+        return None
+    else:
+        user_id = get_current_user(request=request, token = request.state.token)
+        if user_id:
+            print("login_check: token approved")
+            return user_id
+        else:
+            print("login_check: token failed")
+            None
+
+
+# def current_user(request: Request):
+#     if request.state.user is None:
+#         raise ValidationException()
+#     return request.state.user
