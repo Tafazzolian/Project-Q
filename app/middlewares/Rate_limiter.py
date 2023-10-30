@@ -4,12 +4,13 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from slowapi.util import get_remote_address
 import redis.asyncio as redis
 from time import sleep
+from utils.tools import Tools
 
 redis_connection_retry = 0
-while redis_connection_retry < 10:
+while redis_connection_retry < 5:
     try:
         r = redis.Redis(host='127.0.0.1', port=6379, db=0, decode_responses=True,retry_on_timeout=True)
-        print('Connection to Redis established_first_try')
+        Tools.green(key="Rate_limiter_middleware:",text='Connection to Redis established')
         break
     except:
         sleep(1)
@@ -20,7 +21,7 @@ while redis_connection_retry < 10:
 
 class RateLimiter(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        print("Rate-limiter middleware started.")
+        Tools.green(key="Rate_limiter_middleware:",text="Rate-limiter middleware started.")
         client_ip = get_remote_address(request)
         limit = 10  # 10 requests
         interval = 60  # per 60 seconds

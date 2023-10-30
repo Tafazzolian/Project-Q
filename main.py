@@ -6,9 +6,11 @@ from app.middlewares.Rate_limiter import RateLimiter
 
 app = FastAPI()
 
-app.add_middleware(HeaderSecurityMiddleware)
 app.add_middleware(AuthenticateMiddleware)
+app.add_middleware(HeaderSecurityMiddleware)
 app.add_middleware(RateLimiter)
+
+
 
 app.include_router(user.router)
 

@@ -4,19 +4,17 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.responses import Response
 import re
+from utils.tools import Tools
 
 class HeaderSecurityMiddleware(BaseHTTPMiddleware):
     
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
-        print("Header-security middleware started.")
-       
+        
         headers = request.headers
-        # Check for large headers
         total_header_size = sum(len(k) + len(v) for k, v in headers.items())
         if total_header_size > 8000:  # Example threshold
             return JSONResponse(content={"error": "Header size too large"}, status_code=400)
 
-        # Check for malicious patterns
         regex = r"""
     (\b(\w*(%27|'))?\s*(%6F|o|%4F)(%72|r|%52)\b)
     |
@@ -32,4 +30,5 @@ class HeaderSecurityMiddleware(BaseHTTPMiddleware):
         secure_headers = secure.Secure()
         response = await call_next(request)
         secure_headers.framework.fastapi(response)
+        Tools.green(key="Header_security_middleware:",text="Header security check: passed.")
         return response

@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from fastapi.params import Query
 from starlette.requests import Request
 from config.Auth import AccessToken
+from utils.tools import Tools
 
 from db import models
 from database import SessionLocal, engine
@@ -38,15 +39,15 @@ def get_current_user(request: Request, token: Optional[str] = None):
 
 def already_logged_in_check(request:Request):
     if not request.state.token:
-        print("login_check: no tokens found")
+        Tools.yellow(key="login_check:",text="no tokens found")
         return None
     else:
         user_id = get_current_user(request=request, token = request.state.token)
         if user_id:
-            print("login_check: token approved")
+            Tools.green(key="login_check:",text="token approved")
             return user_id
         else:
-            print("login_check: token failed")
+            Tools.red(key="login_check:",text="token failed")
             None
 
 

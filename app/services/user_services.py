@@ -1,7 +1,6 @@
 from fastapi import HTTPException, status
 from app.repositories.user_repo import UserRepository
 from db.models.user import User
-from datetime import timedelta
 from config.Auth import AccessToken
 
 
@@ -36,5 +35,4 @@ class UserService:
             )
         token = AccessToken()
         access_token = token.create_access_token(data={"sub": str(user.id)})
-        
         return {"access_token": access_token, "token_type": "bearer", "user_id":user.id}

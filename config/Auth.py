@@ -3,6 +3,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 import secrets
+from utils.tools import Tools
 
 def generate_secret_key(length: int = 32) -> str:
     return secrets.token_hex(length)
@@ -21,13 +22,12 @@ class AccessToken:
     def create_access_token(self, data: dict):
         expires_delta = timedelta(minutes=self.ACCESS_TOKEN_EXPIRE_MINUTES)
         to_encode = data.copy()
-        expire = datetime.utcnow() + expires_delta
+        expire = Tools.now() + expires_delta
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
         return encoded_jwt
     
     def check_token(self, token):
-        
         credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -39,8 +39,8 @@ class AccessToken:
             user_id: str = payload.get("sub")
             if user_id is None:
                 raise credentials_exception
-            print("check_token: token approved - user_id returend")
+            Tools.green(key="check_token:",text="token approved - user_id returend")
             return user_id
         except:
-            print("check_token: token failed - None returned")
+            Tools.red(key="check_token:",text="token failed - None returned")
             return None
