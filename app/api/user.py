@@ -10,7 +10,7 @@ from db.models.user import User
 
 router = APIRouter(prefix="/account", tags=["account"])
 
-@router.get("/get",response_model=UserInfo)
+@router.post("/get",response_model=UserInfo)
 async def get_user(request_model: GetUser, user_service: UserService = Depends(get_user_service)):
     user_data = request_model.model_dump()
     user = user_service.get_user(user_data)
@@ -27,13 +27,11 @@ async def get_all_users(user_service: UserService = Depends(get_user_service), c
     return user
 
 
-
 @router.post("/register")
 async def create_user(request_model: CreateUser, user_service: UserService = Depends(get_user_service)):
     user_data = request_model.model_dump()
     user = user_service.create_user(user_data)
     return user
-
 
 
 @router.post("/login")
@@ -50,8 +48,3 @@ async def login_for_access_token(
     user_data = request_model.model_dump()
     user = user_service.login_user(user_data)
     return user
-
-# @router.post("/login")
-# async def create_user(request_model: LoginUser, user_service: UserService = Depends(UserService)):
-#     user = user_service.login_user(**request_model.model_dump())
-#     return user

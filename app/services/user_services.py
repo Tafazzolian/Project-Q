@@ -19,7 +19,6 @@ class UserService:
             first_name=user_data["first_name"],
             last_name=user_data["last_name"],
             mobile=user_data["mobile"], 
-            membership=user_data["membership"],
             password=user_data["password"],
             email=user_data["email"]
             )

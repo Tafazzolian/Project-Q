@@ -33,12 +33,11 @@ class UserRepository:
     def get_all_users(self):
         return self.db.query(User).all()
     
-    def create_user(self, first_name, last_name, mobile, membership, password, email=None):
+    def create_user(self, first_name, last_name, mobile, password, email=None):
         user = User(
             first_name=first_name,
             last_name=last_name,
             mobile=mobile,
-            membership=membership,
             email=email,
             hashed_password=User.hash_password(password)
         )
@@ -51,7 +50,7 @@ class UserRepository:
             error_info = str(e.__dict__['orig'])
             self.db.rollback()
             return JSONResponse(content={"error": "Something went wrong", "detail": error_info},
-                                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                                status_code=status.HTTP_409_CONFLICT)
 
 
     def login_user(self, user_data):

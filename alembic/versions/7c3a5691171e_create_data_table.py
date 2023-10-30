@@ -1,8 +1,8 @@
-"""fixing database relations 3
+"""create data table
 
-Revision ID: bfb45a404fb3
+Revision ID: 7c3a5691171e
 Revises: 
-Create Date: 2023-10-27 21:12:42.615645
+Create Date: 2023-10-30 16:09:29.083480
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ from utils.custom_types import EncryptedType
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'bfb45a404fb3'
+revision: str = '7c3a5691171e'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -31,18 +31,21 @@ def upgrade() -> None:
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('hashed_password', sa.String(), nullable=True),
-    sa.Column('two_factor_authentication', sa.Boolean(), nullable=True),
+    sa.Column('is_admin', sa.Boolean(), nullable=True),
     sa.Column('membership', sa.String(length=5), nullable=True),
+    sa.Column('two_factor_authentication', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email'),
+    sa.UniqueConstraint('mobile'),
     schema='account'
     )
     op.create_table('shops',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('shop_name', sa.String(length=200), nullable=True),
-    sa.Column('address', sa.String(length=500), nullable=True),
-    sa.Column('postal_code', sa.String(length=20), nullable=True),
     sa.Column('email', sa.String(length=100), nullable=True),
     sa.Column('phone', sa.String(length=11), nullable=True),
+    sa.Column('address', sa.String(length=500), nullable=True),
+    sa.Column('shop_name', sa.String(length=200), nullable=True),
+    sa.Column('postal_code', sa.String(length=20), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),

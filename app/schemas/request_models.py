@@ -2,16 +2,29 @@ from typing import List, Optional
 
 from pydantic import BaseModel, validator
 
-from utils.validations import PhoneNumberValidator, PasswordStrentghCheck
+from utils.validations import PhoneNumberValidator, PasswordStrentghCheck, EmailValidator, PostalCodeValidator
 
 
 class SendOtpRequestModel(BaseModel):
     mobile: str
+    postal_code: str
 
     @validator('mobile')
-    def mobile_check(cls, v, values):
-        PhoneNumberValidator("body.mobile", v).validate()
+    def mobile_check(cls, v):
+        try:
+            PhoneNumberValidator("body.mobile", v).validate()
+        except ValueError as e:
+            raise ValueError(str(e))
         return v
+    
+    @validator('postal_code', pre=True, always=True)
+    def postal_code_check(cls, v):
+        try:
+            PostalCodeValidator("body.postal_code", v).validate()
+        except ValueError as e:
+            raise ValueError(str(e))
+        return v
+
 
 class LoginUser(BaseModel):
     mobile: str
@@ -19,10 +32,21 @@ class LoginUser(BaseModel):
     password: str
 
     @validator('mobile')
-    def mobile_check(cls, v, values):
-        PhoneNumberValidator("body.mobile", v).validate()
+    def mobile_check(cls, v):
+        try:
+            PhoneNumberValidator("body.mobile", v).validate()
+        except ValueError as e:
+            raise ValueError(str(e))
         return v
-
+    
+    @validator('email', pre=True, always=True)
+    def email_check(cls, v):
+        if v is not None:
+            try:
+                EmailValidator("body.email", v).validate()
+            except ValueError as e:
+                raise ValueError(str(e))
+        return v
 
 class GetUser(BaseModel):
     user_id: Optional[int] = None
@@ -30,8 +54,11 @@ class GetUser(BaseModel):
     last_name: Optional[str] = None
 
     @validator('mobile')
-    def mobile_check(cls, v, values):
-        PhoneNumberValidator("body.mobile", v).validate()
+    def mobile_check(cls, v):
+        try:
+            PhoneNumberValidator("body.mobile", v).validate()
+        except ValueError as e:
+            raise ValueError(str(e))
         return v
 
 class CreateUser(BaseModel):
@@ -39,16 +66,23 @@ class CreateUser(BaseModel):
     last_name: str
     email: Optional[str] = None
     mobile: str
-    membership: str
     password: str
 
     @validator('mobile')
-    def mobile_check(cls, v, values):
-        PhoneNumberValidator("body.mobile", v).validate()
+    def mobile_check(cls, v):
+        try:
+            PhoneNumberValidator("body.mobile", v).validate()
+        except ValueError as e:
+            raise ValueError(str(e))
         return v
+
     
     @validator('password')
-    def password_strentgh_check(cls, v, values):
-        PasswordStrentghCheck("body.password", v).validate()
+    def password_strength_check(cls, v):
+        try:
+            PasswordStrentghCheck("body.password", v).validate()
+        except ValueError as e:
+            raise ValueError(f"Password is too weak: {', '.join(e.args[0])}")
         return v
+
 

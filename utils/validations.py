@@ -11,7 +11,9 @@ class PhoneNumberValidator(AbstractValidator):
         return "invalid_phone_number"
 
     def passes(self) -> bool:
-        return re.match(r"^(0)?9\d{9}$", self.phone_number) is not None
+        if re.match(r"^(0)?9\d{9}$", self.phone_number) is None:
+            raise ValueError("Invalid phone number format")
+        return True
 
 
 class EmailValidator(AbstractValidator):
@@ -23,7 +25,9 @@ class EmailValidator(AbstractValidator):
         return "invalid_email"
 
     def passes(self) -> bool:
-        return re.match(r"([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+", self.email) is not None
+        if re.match(r"([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+", self.email) is None:
+            raise ValueError("Invalid email format")
+        return True
 
 
 class PostalCodeValidator(AbstractValidator):
@@ -35,7 +39,9 @@ class PostalCodeValidator(AbstractValidator):
         return "invalid_postal_code"
 
     def passes(self) -> bool:
-        return re.match(r"\b(?!(\d)\1{3})[13-9]{4}[1346-9][013-9]{5}\b", self.postal_code) is not None
+        if re.match(r"\b(?!(\d)\1{3})[13-9]{4}[1346-9][013-9]{5}\b", self.postal_code) is None:
+            raise ValueError("Invalid postal code format")
+        return True
 
 
 
@@ -57,8 +63,8 @@ class PasswordStrentghCheck(AbstractValidator):
         errors = self.policy.test(self.password)
         if errors:
             error_messages = [str(error) for error in errors]
-            return False, error_messages
-        return True, []
+            raise ValueError(error_messages)
+        return True
 
 
 

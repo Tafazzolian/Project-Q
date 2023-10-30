@@ -23,23 +23,23 @@ class Tools:
     def green(text, key=None):
         GREEN = '\033[32m'
         RESET = '\033[0m'
-        return print(f'{key}{GREEN}{text}{RESET}')
+        return print(f'{GREEN}{key}{text}{RESET}')
     
     @staticmethod
     def red(text, key=None):
         RED = '\033[31m'
         RESET = '\033[0m'
-        return print(f'{key}{RED}{text}{RESET}')
+        return print(f'{RED}{key}{text}{RESET}')
     
     @staticmethod
     def yellow(text, key=None):
         YELLOW = '\033[33m'
         RESET = '\033[0m'
-        return print(f'{key}{YELLOW}{text}{RESET}')
+        return print(f'{YELLOW}{key}{text}{RESET}')
     
     @staticmethod
     def blue(text, key=None):
         BLUE = '\033[34m'
         RESET = '\033[0m'
-        return print(f'{key}{BLUE}{text}{RESET}')
+        return print(f'{BLUE}{key}{text}{RESET}')
     

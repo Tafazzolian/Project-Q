@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, func, Boolean, UniqueConstraint
+from sqlalchemy import Column, Integer, String, DateTime, func, Boolean, UniqueConstraint, ForeignKey
 from .base import Base
 from sqlalchemy.orm import relationship
 import bcrypt
@@ -11,8 +11,7 @@ class User(Base):
         UniqueConstraint('first_name', name='first_name'),
         UniqueConstraint('last_name', name='last_name'),
     )
-
-    id = Column(Integer, primary_key=True)
+    id         = Column(Integer, primary_key=True)
     first_name = Column(String(30))
     last_name  = Column(String(30))
     email      = Column(String(100), unique=True ,nullable=True)
@@ -23,20 +22,19 @@ class User(Base):
     updated_at = Column(DateTime, onupdate=func.now(), default=func.now())
     
     hashed_password = Column(String)
-    two_factor_authentication =  Column(Boolean, nullable=True, default=False)
-    membership = Column(String(5),default="Free")
+    is_admin        = Column(Boolean, default=False)
+    membership      = Column(String(5), default="Free")
+    two_factor_authentication = Column(Boolean, nullable=True, default=False)
 
-    shops   = relationship('Shop'  , back_populates='users')
+    shops   = relationship('Shop', back_populates='users')
     files   = relationship('File', back_populates='users')
-    ufo     = relationship('Ufo',  back_populates='users', uselist=False)
+    ufo     = relationship('Ufo' , back_populates='users', uselist=False)
 
     __table_args__ = {'schema': 'account'}
 
     def hash_password(password: str) -> str:
         password_bytes = password.encode('utf-8')
-        # Generate a salt
         salt = bcrypt.gensalt()
-        # Hash the password
         hashed_password = bcrypt.hashpw(password_bytes, salt)
         # Convert the hashed password back to a string for storage
         return hashed_password.decode('utf-8')

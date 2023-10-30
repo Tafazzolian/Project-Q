@@ -7,11 +7,12 @@ class Shop(Base):
     __table_args__ = {'schema': 'shop'}
 
     id         = Column(Integer,  primary_key=True)
-    shop_name  = Column(String(200), nullable=True)
-    address    = Column(String(500), nullable=True)
-    postal_code= Column(String(20) , nullable=True)
     email      = Column(String(100), nullable=True)
     phone      = Column(String(11) , nullable=True)
+    address    = Column(String(500), nullable=True)
+    shop_name  = Column(String(200), nullable=True)
+    postal_code= Column(String(20) , nullable=True)
+
 
     created_at = Column(DateTime, default=func.now())
     deleted_at = Column(DateTime, default=None)
