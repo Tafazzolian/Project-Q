@@ -22,7 +22,7 @@ async def get_user(request_model: GetUser, user_service: UserService = Depends(g
 @router.get("/get-all", response_model=List[UserInfo])
 async def get_all_users(user_service: UserService = Depends(get_user_service), current_user = Depends(get_current_user)):
     if not current_user:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=401, detail="Unauthorized_Access")
     user = user_service.get_all_users()
     return user
 

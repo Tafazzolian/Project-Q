@@ -29,7 +29,7 @@ def get_user_service(repo: UserRepository = Depends(inject_session_to_repo)) -> 
     return UserService(repo)
 
 
-def get_current_user(request: Request, token: Optional[str] = None) -> str:
+def get_current_user(request: Request, token: Optional[str] = None):
     if not token:
         token = request.state.token
     user_id = AccessToken().check_token(token)

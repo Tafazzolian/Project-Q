@@ -39,9 +39,8 @@ class AccessToken:
             user_id: str = payload.get("sub")
             if user_id is None:
                 raise credentials_exception
-            print("check_token: token approved-user_id returend")
+            print("check_token: token approved - user_id returend")
             return user_id
         except:
-            print("check_token: token failed-None returned")
+            print("check_token: token failed - None returned")
             return None
-            # raise credentials_exception
