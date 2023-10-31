@@ -1,0 +1,786 @@
+2023-10-31 15:50:33.882 | ERROR    | app.middlewares.Rate_limiter:dispatch:41 - <red>Redis connection failed</red>
+Traceback (most recent call last):
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 243, in connect
+    await self.retry.call_with_retry(
+          │    │     └ <function Retry.call_with_retry at 0x10b061e40>
+          │    └ <redis.asyncio.retry.Retry object at 0x10b54ec40>
+          └ Connection<host=127.0.0.1,port=6379,db=0>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/retry.py", line 59, in call_with_retry
+    return await do()
+                 └ <function AbstractConnection.connect.<locals>.<lambda> at 0x10b4fb9c0>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 650, in _connect
+    reader, writer = await asyncio.open_connection(
+                           │       └ <function open_connection at 0x103ed9080>
+                           └ <module 'asyncio' from '/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyn...
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/streams.py", line 48, in open_connection
+    transport, _ = await loop.create_connection(
+                         │    └ <function BaseEventLoop.create_connection at 0x103ed7880>
+                         └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1085, in create_connection
+    raise exceptions[0]
+          └ None
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1069, in create_connection
+    sock = await self._connect_sock(
+                 │    └ <function BaseEventLoop._connect_sock at 0x103ed77e0>
+                 └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 973, in _connect_sock
+    await self.sock_connect(sock, address)
+          │    │            │     └ ('127.0.0.1', 6379)
+          │    │            └ <socket.socket [closed] fd=-1, family=2, type=1, proto=6>
+          │    └ <function BaseSelectorEventLoop.sock_connect at 0x103f322a0>
+          └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/selector_events.py", line 634, in sock_connect
+    return await fut
+                 └ None
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/selector_events.py", line 674, in _sock_connect_cb
+    raise OSError(err, f'Connect call failed {address}')
+                  └ 61
+
+ConnectionRefusedError: [Errno 61] Connect call failed ('127.0.0.1', 6379)
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 3
+               │     └ 14
+               └ <function _main at 0x1029249a0>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 3
+           │    └ <function BaseProcess._bootstrap at 0x102835800>
+           └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x102834d60>
+    └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x10b3668d0>, 'target': <bound method Server.run of <uvicorn.server.Server object...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+    │    └ <function subprocess_started at 0x10b4753a0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/_subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=10, family=2, type=1, proto=0, laddr=('0.0.0.0', 8090)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x10b4adbd0>>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/server.py", line 61, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           │       │   │    │             └ [<socket.socket fd=10, family=2, type=1, proto=0, laddr=('0.0.0.0', 8090)>]
+           │       │   │    └ <function Server.serve at 0x10b4747c0>
+           │       │   └ <uvicorn.server.Server object at 0x10b4adbd0>
+           │       └ <function run at 0x102678900>
+           └ <module 'asyncio' from '/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyn...
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           │      │   └ <coroutine object Server.serve at 0x10b4b07b0>
+           │      └ <function Runner.run at 0x103ed8d60>
+           └ <asyncio.runners.Runner object at 0x105340f90>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<Server.serve() running at /Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-package...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x103ed6980>
+           │    └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x105340f90>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 640, in run_until_complete
+    self.run_forever()
+    │    └ <function BaseEventLoop.run_forever at 0x103ed68e0>
+    └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 607, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x103ed8720>
+    └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1922, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x103e794e0>
+    └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/events.py", line 80, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 408, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+                   └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x105f40e90>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 84, in __call__
+    return await self.app(scope, receive, send)
+                 │    │   │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10b515750>>
+                 │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10b515750>>
+                 │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+                 │    └ <fastapi.applications.FastAPI object at 0x10b4b4a10>
+                 └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x105f40e90>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/fastapi/applications.py", line 1115, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10b515750>>
+                           │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10b515750>>
+                           └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/starlette/applications.py", line 122, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10b515750>>
+          │    │                │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10b515750>>
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x10b515010>
+          └ <fastapi.applications.FastAPI object at 0x10b4b4a10>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x10b4faf20>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10b515750>>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+          │    └ <app.middlewares.Rate_limiter.RateLimiter object at 0x10b514950>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x10b515010>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/starlette/middleware/base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+                     │    │             │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next at 0x10b510360>
+                     │    │             └ <starlette.requests.Request object at 0x10b3422d0>
+                     │    └ <bound method RateLimiter.dispatch of <app.middlewares.Rate_limiter.RateLimiter object at 0x10b514950>>
+                     └ <app.middlewares.Rate_limiter.RateLimiter object at 0x10b514950>
+
+> File "/Users/tafazzolian/Documents/Q-Pay/app/middlewares/Rate_limiter.py", line 22, in dispatch
+    count = await r.get(client_ip)
+                  │ │   └ '127.0.0.1'
+                  │ └ <function BasicKeyCommands.get at 0x10b1407c0>
+                  └ Redis<ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>>
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/client.py", line 601, in execute_command
+    conn = self.connection or await pool.get_connection(command_name, **options)
+           │    │                   │    │              │               └ {}
+           │    │                   │    │              └ 'GET'
+           │    │                   │    └ <function ConnectionPool.get_connection at 0x10b08c220>
+           │    │                   └ ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>
+           │    └ None
+           └ Redis<ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1040, in get_connection
+    await self.ensure_connection(connection)
+          │    │                 └ Connection<host=127.0.0.1,port=6379,db=0>
+          │    └ <function ConnectionPool.ensure_connection at 0x10b08c400>
+          └ ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1062, in ensure_connection
+    await connection.connect()
+          │          └ <function AbstractConnection.connect at 0x10b086520>
+          └ Connection<host=127.0.0.1,port=6379,db=0>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 251, in connect
+    raise ConnectionError(self._error_message(e))
+          │               │    └ <function Connection._error_message at 0x10b087240>
+          │               └ Connection<host=127.0.0.1,port=6379,db=0>
+          └ <class 'redis.exceptions.ConnectionError'>
+
+redis.exceptions.ConnectionError: Error 61 connecting to 127.0.0.1:6379. 61.
+
+
+2023-10-31 15:51:04.104 | ERROR    | app.middlewares.Rate_limiter:dispatch:41 - <red>Redis connection failed</red>
+Traceback (most recent call last):
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 243, in connect
+    await self.retry.call_with_retry(
+          │    │     └ <function Retry.call_with_retry at 0x10b061e40>
+          │    └ <redis.asyncio.retry.Retry object at 0x10c0aa900>
+          └ Connection<host=127.0.0.1,port=6379,db=0>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/retry.py", line 59, in call_with_retry
+    return await do()
+                 └ <function AbstractConnection.connect.<locals>.<lambda> at 0x10b55c2c0>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 650, in _connect
+    reader, writer = await asyncio.open_connection(
+                           │       └ <function open_connection at 0x103ed9080>
+                           └ <module 'asyncio' from '/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyn...
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/streams.py", line 48, in open_connection
+    transport, _ = await loop.create_connection(
+                         │    └ <function BaseEventLoop.create_connection at 0x103ed7880>
+                         └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1085, in create_connection
+    raise exceptions[0]
+          └ None
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1069, in create_connection
+    sock = await self._connect_sock(
+                 │    └ <function BaseEventLoop._connect_sock at 0x103ed77e0>
+                 └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 973, in _connect_sock
+    await self.sock_connect(sock, address)
+          │    │            │     └ ('127.0.0.1', 6379)
+          │    │            └ <socket.socket [closed] fd=-1, family=2, type=1, proto=6>
+          │    └ <function BaseSelectorEventLoop.sock_connect at 0x103f322a0>
+          └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/selector_events.py", line 634, in sock_connect
+    return await fut
+                 └ None
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/selector_events.py", line 674, in _sock_connect_cb
+    raise OSError(err, f'Connect call failed {address}')
+                  └ 61
+
+ConnectionRefusedError: [Errno 61] Connect call failed ('127.0.0.1', 6379)
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 3
+               │     └ 14
+               └ <function _main at 0x1029249a0>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 3
+           │    └ <function BaseProcess._bootstrap at 0x102835800>
+           └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x102834d60>
+    └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x10b3668d0>, 'target': <bound method Server.run of <uvicorn.server.Server object...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+    │    └ <function subprocess_started at 0x10b4753a0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/_subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=10, family=2, type=1, proto=0, laddr=('0.0.0.0', 8090)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x10b4adbd0>>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/server.py", line 61, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           │       │   │    │             └ [<socket.socket fd=10, family=2, type=1, proto=0, laddr=('0.0.0.0', 8090)>]
+           │       │   │    └ <function Server.serve at 0x10b4747c0>
+           │       │   └ <uvicorn.server.Server object at 0x10b4adbd0>
+           │       └ <function run at 0x102678900>
+           └ <module 'asyncio' from '/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyn...
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           │      │   └ <coroutine object Server.serve at 0x10b4b07b0>
+           │      └ <function Runner.run at 0x103ed8d60>
+           └ <asyncio.runners.Runner object at 0x105340f90>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<Server.serve() running at /Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-package...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x103ed6980>
+           │    └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x105340f90>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 640, in run_until_complete
+    self.run_forever()
+    │    └ <function BaseEventLoop.run_forever at 0x103ed68e0>
+    └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 607, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x103ed8720>
+    └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1922, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x103e794e0>
+    └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/events.py", line 80, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 408, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+                   └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x105f40e90>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 84, in __call__
+    return await self.app(scope, receive, send)
+                 │    │   │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10b54d790>>
+                 │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10b54d790>>
+                 │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+                 │    └ <fastapi.applications.FastAPI object at 0x10b4b4a10>
+                 └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x105f40e90>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/fastapi/applications.py", line 1115, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10b54d790>>
+                           │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10b54d790>>
+                           └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/starlette/applications.py", line 122, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10b54d790>>
+          │    │                │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10b54d790>>
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x10b515010>
+          └ <fastapi.applications.FastAPI object at 0x10b4b4a10>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x10b55d3a0>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10b54d790>>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+          │    └ <app.middlewares.Rate_limiter.RateLimiter object at 0x10b514950>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x10b515010>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/starlette/middleware/base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+                     │    │             │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next at 0x10b55de40>
+                     │    │             └ <starlette.requests.Request object at 0x10b54d310>
+                     │    └ <bound method RateLimiter.dispatch of <app.middlewares.Rate_limiter.RateLimiter object at 0x10b514950>>
+                     └ <app.middlewares.Rate_limiter.RateLimiter object at 0x10b514950>
+
+> File "/Users/tafazzolian/Documents/Q-Pay/app/middlewares/Rate_limiter.py", line 22, in dispatch
+    count = await r.get(client_ip)
+                  │ │   └ '127.0.0.1'
+                  │ └ <function BasicKeyCommands.get at 0x10b1407c0>
+                  └ Redis<ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>>
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/client.py", line 601, in execute_command
+    conn = self.connection or await pool.get_connection(command_name, **options)
+           │    │                   │    │              │               └ {}
+           │    │                   │    │              └ 'GET'
+           │    │                   │    └ <function ConnectionPool.get_connection at 0x10b08c220>
+           │    │                   └ ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>
+           │    └ None
+           └ Redis<ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1040, in get_connection
+    await self.ensure_connection(connection)
+          │    │                 └ Connection<host=127.0.0.1,port=6379,db=0>
+          │    └ <function ConnectionPool.ensure_connection at 0x10b08c400>
+          └ ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1062, in ensure_connection
+    await connection.connect()
+          │          └ <function AbstractConnection.connect at 0x10b086520>
+          └ Connection<host=127.0.0.1,port=6379,db=0>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 251, in connect
+    raise ConnectionError(self._error_message(e))
+          │               │    └ <function Connection._error_message at 0x10b087240>
+          │               └ Connection<host=127.0.0.1,port=6379,db=0>
+          └ <class 'redis.exceptions.ConnectionError'>
+
+redis.exceptions.ConnectionError: Error 61 connecting to 127.0.0.1:6379. 61.
+2023-10-31 15:51:49.927 | ERROR    | app.middlewares.Rate_limiter:dispatch:41 - <red>Redis connection failed</red>
+Traceback (most recent call last):
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 243, in connect
+    await self.retry.call_with_retry(
+          │    │     └ <function Retry.call_with_retry at 0x10b061e40>
+          │    └ <redis.asyncio.retry.Retry object at 0x10c0c8cc0>
+          └ Connection<host=127.0.0.1,port=6379,db=0>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/retry.py", line 59, in call_with_retry
+    return await do()
+                 └ <function AbstractConnection.connect.<locals>.<lambda> at 0x10b55c2c0>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 650, in _connect
+    reader, writer = await asyncio.open_connection(
+                           │       └ <function open_connection at 0x103ed9080>
+                           └ <module 'asyncio' from '/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyn...
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/streams.py", line 48, in open_connection
+    transport, _ = await loop.create_connection(
+                         │    └ <function BaseEventLoop.create_connection at 0x103ed7880>
+                         └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1085, in create_connection
+    raise exceptions[0]
+          └ None
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1069, in create_connection
+    sock = await self._connect_sock(
+                 │    └ <function BaseEventLoop._connect_sock at 0x103ed77e0>
+                 └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 973, in _connect_sock
+    await self.sock_connect(sock, address)
+          │    │            │     └ ('127.0.0.1', 6379)
+          │    │            └ <socket.socket [closed] fd=-1, family=2, type=1, proto=6>
+          │    └ <function BaseSelectorEventLoop.sock_connect at 0x103f322a0>
+          └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/selector_events.py", line 634, in sock_connect
+    return await fut
+                 └ None
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/selector_events.py", line 674, in _sock_connect_cb
+    raise OSError(err, f'Connect call failed {address}')
+                  └ 61
+
+ConnectionRefusedError: [Errno 61] Connect call failed ('127.0.0.1', 6379)
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 3
+               │     └ 14
+               └ <function _main at 0x1029249a0>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 3
+           │    └ <function BaseProcess._bootstrap at 0x102835800>
+           └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x102834d60>
+    └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x10b3668d0>, 'target': <bound method Server.run of <uvicorn.server.Server object...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+    │    └ <function subprocess_started at 0x10b4753a0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/_subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=10, family=2, type=1, proto=0, laddr=('0.0.0.0', 8090)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x10b4adbd0>>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/server.py", line 61, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           │       │   │    │             └ [<socket.socket fd=10, family=2, type=1, proto=0, laddr=('0.0.0.0', 8090)>]
+           │       │   │    └ <function Server.serve at 0x10b4747c0>
+           │       │   └ <uvicorn.server.Server object at 0x10b4adbd0>
+           │       └ <function run at 0x102678900>
+           └ <module 'asyncio' from '/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyn...
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           │      │   └ <coroutine object Server.serve at 0x10b4b07b0>
+           │      └ <function Runner.run at 0x103ed8d60>
+           └ <asyncio.runners.Runner object at 0x105340f90>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<Server.serve() running at /Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-package...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x103ed6980>
+           │    └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x105340f90>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 640, in run_until_complete
+    self.run_forever()
+    │    └ <function BaseEventLoop.run_forever at 0x103ed68e0>
+    └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 607, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x103ed8720>
+    └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1922, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x103e794e0>
+    └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/events.py", line 80, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 408, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+                   └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x105f40e90>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 84, in __call__
+    return await self.app(scope, receive, send)
+                 │    │   │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10c0ab210>>
+                 │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10c0ab210>>
+                 │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+                 │    └ <fastapi.applications.FastAPI object at 0x10b4b4a10>
+                 └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x105f40e90>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/fastapi/applications.py", line 1115, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10c0ab210>>
+                           │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10c0ab210>>
+                           └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/starlette/applications.py", line 122, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10c0ab210>>
+          │    │                │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10c0ab210>>
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x10b515010>
+          └ <fastapi.applications.FastAPI object at 0x10b4b4a10>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x10b55d620>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10c0ab210>>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+          │    └ <app.middlewares.Rate_limiter.RateLimiter object at 0x10b514950>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x10b515010>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/starlette/middleware/base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+                     │    │             │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next at 0x10b55dbc0>
+                     │    │             └ <starlette.requests.Request object at 0x10c0aa5d0>
+                     │    └ <bound method RateLimiter.dispatch of <app.middlewares.Rate_limiter.RateLimiter object at 0x10b514950>>
+                     └ <app.middlewares.Rate_limiter.RateLimiter object at 0x10b514950>
+
+> File "/Users/tafazzolian/Documents/Q-Pay/app/middlewares/Rate_limiter.py", line 22, in dispatch
+    count = await r.get(client_ip)
+                  │ │   └ '127.0.0.1'
+                  │ └ <function BasicKeyCommands.get at 0x10b1407c0>
+                  └ Redis<ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>>
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/client.py", line 601, in execute_command
+    conn = self.connection or await pool.get_connection(command_name, **options)
+           │    │                   │    │              │               └ {}
+           │    │                   │    │              └ 'GET'
+           │    │                   │    └ <function ConnectionPool.get_connection at 0x10b08c220>
+           │    │                   └ ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>
+           │    └ None
+           └ Redis<ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1040, in get_connection
+    await self.ensure_connection(connection)
+          │    │                 └ Connection<host=127.0.0.1,port=6379,db=0>
+          │    └ <function ConnectionPool.ensure_connection at 0x10b08c400>
+          └ ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1062, in ensure_connection
+    await connection.connect()
+          │          └ <function AbstractConnection.connect at 0x10b086520>
+          └ Connection<host=127.0.0.1,port=6379,db=0>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 251, in connect
+    raise ConnectionError(self._error_message(e))
+          │               │    └ <function Connection._error_message at 0x10b087240>
+          │               └ Connection<host=127.0.0.1,port=6379,db=0>
+          └ <class 'redis.exceptions.ConnectionError'>
+
+redis.exceptions.ConnectionError: Error 61 connecting to 127.0.0.1:6379. 61.
+2023-10-31 15:52:17.896 | ERROR    | app.middlewares.Rate_limiter:dispatch:41 - <red>Redis connection failed</red>
+Traceback (most recent call last):
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 243, in connect
+    await self.retry.call_with_retry(
+          │    │     └ <function Retry.call_with_retry at 0x10b061e40>
+          │    └ <redis.asyncio.retry.Retry object at 0x10c21a3c0>
+          └ Connection<host=127.0.0.1,port=6379,db=0>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/retry.py", line 59, in call_with_retry
+    return await do()
+                 └ <function AbstractConnection.connect.<locals>.<lambda> at 0x10b55dee0>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 650, in _connect
+    reader, writer = await asyncio.open_connection(
+                           │       └ <function open_connection at 0x103ed9080>
+                           └ <module 'asyncio' from '/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyn...
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/streams.py", line 48, in open_connection
+    transport, _ = await loop.create_connection(
+                         │    └ <function BaseEventLoop.create_connection at 0x103ed7880>
+                         └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1085, in create_connection
+    raise exceptions[0]
+          └ None
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1069, in create_connection
+    sock = await self._connect_sock(
+                 │    └ <function BaseEventLoop._connect_sock at 0x103ed77e0>
+                 └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 973, in _connect_sock
+    await self.sock_connect(sock, address)
+          │    │            │     └ ('127.0.0.1', 6379)
+          │    │            └ <socket.socket [closed] fd=-1, family=2, type=1, proto=6>
+          │    └ <function BaseSelectorEventLoop.sock_connect at 0x103f322a0>
+          └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/selector_events.py", line 634, in sock_connect
+    return await fut
+                 └ None
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/selector_events.py", line 674, in _sock_connect_cb
+    raise OSError(err, f'Connect call failed {address}')
+                  └ 61
+
+ConnectionRefusedError: [Errno 61] Connect call failed ('127.0.0.1', 6379)
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 3
+               │     └ 14
+               └ <function _main at 0x1029249a0>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 3
+           │    └ <function BaseProcess._bootstrap at 0x102835800>
+           └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x102834d60>
+    └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x10b3668d0>, 'target': <bound method Server.run of <uvicorn.server.Server object...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+    │    └ <function subprocess_started at 0x10b4753a0>
+    └ <SpawnProcess name='SpawnProcess-1' parent=79647 started>
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/_subprocess.py", line 76, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=10, family=2, type=1, proto=0, laddr=('0.0.0.0', 8090)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x10b4adbd0>>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/server.py", line 61, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           │       │   │    │             └ [<socket.socket fd=10, family=2, type=1, proto=0, laddr=('0.0.0.0', 8090)>]
+           │       │   │    └ <function Server.serve at 0x10b4747c0>
+           │       │   └ <uvicorn.server.Server object at 0x10b4adbd0>
+           │       └ <function run at 0x102678900>
+           └ <module 'asyncio' from '/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyn...
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/runners.py", line 190, in run
+    return runner.run(main)
+           │      │   └ <coroutine object Server.serve at 0x10b4b07b0>
+           │      └ <function Runner.run at 0x103ed8d60>
+           └ <asyncio.runners.Runner object at 0x105340f90>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<Server.serve() running at /Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-package...
+           │    │     └ <function BaseEventLoop.run_until_complete at 0x103ed6980>
+           │    └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x105340f90>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 640, in run_until_complete
+    self.run_forever()
+    │    └ <function BaseEventLoop.run_forever at 0x103ed68e0>
+    └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 607, in run_forever
+    self._run_once()
+    │    └ <function BaseEventLoop._run_once at 0x103ed8720>
+    └ <_UnixSelectorEventLoop running=True closed=False debug=False>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/base_events.py", line 1922, in _run_once
+    handle._run()
+    │      └ <function Handle._run at 0x103e794e0>
+    └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+
+  File "/opt/homebrew/Cellar/python@3.11/3.11.5/Frameworks/Python.framework/Versions/3.11/lib/python3.11/asyncio/events.py", line 80, in _run
+    self._context.run(self._callback, *self._args)
+    │    │            │    │           │    └ <member '_args' of 'Handle' objects>
+    │    │            │    │           └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+    │    │            │    └ <member '_callback' of 'Handle' objects>
+    │    │            └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+    │    └ <member '_context' of 'Handle' objects>
+    └ <Handle Task.task_wakeup(<Future finis...0.1', 6379)")>)>
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/protocols/http/h11_impl.py", line 408, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+                   └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x105f40e90>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/uvicorn/middleware/proxy_headers.py", line 84, in __call__
+    return await self.app(scope, receive, send)
+                 │    │   │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10c0aa390>>
+                 │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10c0aa390>>
+                 │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+                 │    └ <fastapi.applications.FastAPI object at 0x10b4b4a10>
+                 └ <uvicorn.middleware.proxy_headers.ProxyHeadersMiddleware object at 0x105f40e90>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/fastapi/applications.py", line 1115, in __call__
+    await super().__call__(scope, receive, send)
+                           │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10c0aa390>>
+                           │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10c0aa390>>
+                           └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/starlette/applications.py", line 122, in __call__
+    await self.middleware_stack(scope, receive, send)
+          │    │                │      │        └ <bound method RequestResponseCycle.send of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10c0aa390>>
+          │    │                │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10c0aa390>>
+          │    │                └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+          │    └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x10b515010>
+          └ <fastapi.applications.FastAPI object at 0x10b4b4a10>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+          │    │   │      │        └ <function ServerErrorMiddleware.__call__.<locals>._send at 0x10b55dbc0>
+          │    │   │      └ <bound method RequestResponseCycle.receive of <uvicorn.protocols.http.h11_impl.RequestResponseCycle object at 0x10c0aa390>>
+          │    │   └ {'type': 'http', 'asgi': {'version': '3.0', 'spec_version': '2.3'}, 'http_version': '1.1', 'server': ('127.0.0.1', 8090), 'cl...
+          │    └ <app.middlewares.Rate_limiter.RateLimiter object at 0x10b514950>
+          └ <starlette.middleware.errors.ServerErrorMiddleware object at 0x10b515010>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/starlette/middleware/base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+                     │    │             │        └ <function BaseHTTPMiddleware.__call__.<locals>.call_next at 0x10b55c2c0>
+                     │    │             └ <starlette.requests.Request object at 0x10c0c9f90>
+                     │    └ <bound method RateLimiter.dispatch of <app.middlewares.Rate_limiter.RateLimiter object at 0x10b514950>>
+                     └ <app.middlewares.Rate_limiter.RateLimiter object at 0x10b514950>
+
+> File "/Users/tafazzolian/Documents/Q-Pay/app/middlewares/Rate_limiter.py", line 22, in dispatch
+    count = await r.get(client_ip)
+                  │ │   └ '127.0.0.1'
+                  │ └ <function BasicKeyCommands.get at 0x10b1407c0>
+                  └ Redis<ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>>
+
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/client.py", line 601, in execute_command
+    conn = self.connection or await pool.get_connection(command_name, **options)
+           │    │                   │    │              │               └ {}
+           │    │                   │    │              └ 'GET'
+           │    │                   │    └ <function ConnectionPool.get_connection at 0x10b08c220>
+           │    │                   └ ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>
+           │    └ None
+           └ Redis<ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1040, in get_connection
+    await self.ensure_connection(connection)
+          │    │                 └ Connection<host=127.0.0.1,port=6379,db=0>
+          │    └ <function ConnectionPool.ensure_connection at 0x10b08c400>
+          └ ConnectionPool<Connection<host=127.0.0.1,port=6379,db=0>>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1062, in ensure_connection
+    await connection.connect()
+          │          └ <function AbstractConnection.connect at 0x10b086520>
+          └ Connection<host=127.0.0.1,port=6379,db=0>
+  File "/Users/tafazzolian/Documents/Q-Pay/qv/lib/python3.11/site-packages/redis/asyncio/connection.py", line 251, in connect
+    raise ConnectionError(self._error_message(e))
+          │               │    └ <function Connection._error_message at 0x10b087240>
+          │               └ Connection<host=127.0.0.1,port=6379,db=0>
+          └ <class 'redis.exceptions.ConnectionError'>
+
+redis.exceptions.ConnectionError: Error 61 connecting to 127.0.0.1:6379. 61.
