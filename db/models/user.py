@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, DateTime, func, Boolean, UniqueC
 from .base import Base
 from sqlalchemy.orm import relationship
 import bcrypt
+from utils.tools import Tools
 
 class User(Base):
     __tablename__ = 'users'
@@ -17,9 +18,9 @@ class User(Base):
     email      = Column(String(100), unique=True ,nullable=True)
     mobile     = Column(String(11), unique=True)
     
-    created_at = Column(DateTime, default=func.now())
-    deleted_at = Column(DateTime, default=None)
-    updated_at = Column(DateTime, onupdate=func.now(), default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    deleted_at = Column(DateTime(timezone=True), default=None)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now(), default=None)
     
     hashed_password = Column(String)
     is_admin        = Column(Boolean, default=False)

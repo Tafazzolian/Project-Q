@@ -1,4 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, func, ForeignKey
+
+from utils.tools import Tools
 from .base import Base
 from sqlalchemy.orm import relationship
 
@@ -14,9 +16,9 @@ class Shop(Base):
     postal_code= Column(String(20) , nullable=True)
 
 
-    created_at = Column(DateTime, default=func.now())
-    deleted_at = Column(DateTime, default=None)
-    updated_at = Column(DateTime, onupdate=func.now(), default=func.now())
+    created_at = Column(DateTime(timezone=True), default=func.now())
+    deleted_at = Column(DateTime(timezone=True), default=None)
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now(), default=None)
 
     user_id = Column(Integer, ForeignKey('account.users.id'))
     

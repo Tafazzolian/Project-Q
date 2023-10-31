@@ -1,19 +1,20 @@
-"""create data table
+"""updating db desperatly
 
-Revision ID: 7c3a5691171e
+Revision ID: 624b4159979f
 Revises: 
-Create Date: 2023-10-30 16:09:29.083480
+Create Date: 2023-10-31 11:56:47.978329
 
 """
 from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
+
 from utils.custom_types import EncryptedType
 
 
 # revision identifiers, used by Alembic.
-revision: str = '7c3a5691171e'
+revision: str = '624b4159979f'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -27,9 +28,9 @@ def upgrade() -> None:
     sa.Column('last_name', sa.String(length=30), nullable=True),
     sa.Column('email', sa.String(length=100), nullable=True),
     sa.Column('mobile', sa.String(length=11), nullable=True),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.Column('deleted_at', sa.DateTime(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('hashed_password', sa.String(), nullable=True),
     sa.Column('is_admin', sa.Boolean(), nullable=True),
     sa.Column('membership', sa.String(length=5), nullable=True),
@@ -46,9 +47,9 @@ def upgrade() -> None:
     sa.Column('address', sa.String(length=500), nullable=True),
     sa.Column('shop_name', sa.String(length=200), nullable=True),
     sa.Column('postal_code', sa.String(length=20), nullable=True),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.Column('deleted_at', sa.DateTime(), nullable=True),
-    sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.Column('created_at', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['account.users.id'], ),
     sa.PrimaryKeyConstraint('id'),
@@ -59,6 +60,9 @@ def upgrade() -> None:
     sa.Column('tax_number', EncryptedType(), nullable=True),
     sa.Column('Shaba_number', EncryptedType(), nullable=True),
     sa.Column('national_code', EncryptedType(), nullable=True),
+    sa.Column('created_at', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['account.users.id'], ),
     sa.PrimaryKeyConstraint('id'),

@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, func, ForeignKey
 from sqlalchemy.orm import relationship
+
+from utils.tools import Tools
 from .base import Base
 
 
@@ -13,7 +15,7 @@ class File(Base):
     link       = Column(String(255))
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now(),default=None)
 
     user_id    = Column(Integer, ForeignKey('account.users.id'))
     shop_id    = Column(Integer, ForeignKey('shop.shops.id'), nullable=True)

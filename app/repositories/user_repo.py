@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from db.models.user import User
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi.responses import JSONResponse
-from fastapi import HTTPException, status
+from fastapi import status
 from sqlalchemy import or_, text
 
 class UserRepository:
