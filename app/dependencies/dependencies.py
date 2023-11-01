@@ -5,7 +5,7 @@ from typing import Any, Optional
 from sqlalchemy.orm import Session
 from fastapi.params import Query
 from starlette.requests import Request
-from config.Auth import AccessToken
+from config.authentication import AccessToken
 from utils.tools import Tools
 
 from db import models

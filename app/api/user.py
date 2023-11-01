@@ -5,6 +5,7 @@ from app.schemas.request_models import GetUser, CreateUser, LoginUser
 from app.schemas.response_model import UserInfo
 from app.dependencies.dependencies import get_user_service, get_current_user, already_logged_in_check
 from typing import List, Optional
+from config.cache import cache
 
 from db.models.user import User
 
@@ -23,8 +24,15 @@ async def get_user(request_model: GetUser, user_service: UserService = Depends(g
 async def get_all_users(user_service: UserService = Depends(get_user_service), current_user = Depends(get_current_user)):
     if not current_user:
         raise HTTPException(status_code=401, detail="Unauthorized_Access")
-    user = user_service.get_all_users()
-    return user
+    
+    if "get_all_users" in cache:
+        print('cache worked')
+        return cache["get_all_users"]
+    else:
+        users = user_service.get_all_users()
+        cache.set("get_all_users",users,expire=5)
+        # cache["get_all_users"] = users
+        return users
 
 
 @router.post("/register")

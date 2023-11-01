@@ -9,6 +9,7 @@ from app.middlewares.Rate_limiter import RateLimiter
 from config.logs import logger
 
 app = FastAPI()
+app.include_router(user.router)
 
 @app.exception_handler(Exception)
 async def exception_handler(request: Request, exc: Exception):
@@ -22,8 +23,6 @@ async def exception_handler(request: Request, exc: Exception):
 app.add_middleware(AuthenticateMiddleware)
 app.add_middleware(HeaderSecurityMiddleware)
 app.add_middleware(RateLimiter)
-
-app.include_router(user.router)
 
 if __name__ == "__main__":
     import uvicorn

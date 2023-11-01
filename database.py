@@ -24,10 +24,3 @@ async_engine = create_async_engine(ASYNC_DATABASE_URL, echo=True)
 AsyncSessionLocal = sessionmaker(
     bind=async_engine, class_=AsyncSession, expire_on_commit=False
 )
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()

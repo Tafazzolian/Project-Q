@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from app.repositories.user_repo import UserRepository
 from db.models.user import User
-from config.Auth import AccessToken
+from config.authentication import AccessToken
 
 
 class UserService:

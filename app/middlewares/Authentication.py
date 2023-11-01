@@ -1,7 +1,7 @@
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import Response
-from config.Auth import AccessToken
+from config.authentication import AccessToken
 from utils.tools import Tools
 
 
