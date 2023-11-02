@@ -1,8 +1,8 @@
-"""updating db
+"""test
 
-Revision ID: a1bd96d681df
-Revises: 7c3a5691171e
-Create Date: 2023-10-31 11:34:26.443906
+Revision ID: cd2865eff31f
+Revises: 2c7738429c72
+Create Date: 2023-11-02 11:54:44.846910
 
 """
 from typing import Sequence, Union
@@ -10,12 +10,10 @@ from typing import Sequence, Union
 from alembic import op
 import sqlalchemy as sa
 
-from utils.custom_types import EncryptedType
-
 
 # revision identifiers, used by Alembic.
-revision: str = 'a1bd96d681df'
-down_revision: Union[str, None] = '7c3a5691171e'
+revision: str = 'cd2865eff31f'
+down_revision: Union[str, None] = '2c7738429c72'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -40,6 +38,7 @@ def upgrade() -> None:
     sa.UniqueConstraint('mobile'),
     schema='account'
     )
+    op.create_index(op.f('ix_account_users_id'), 'users', ['id'], unique=False, schema='account')
     op.create_table('shops',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('email', sa.String(length=100), nullable=True),
@@ -55,11 +54,13 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     schema='shop'
     )
+    op.create_index(op.f('ix_shop_shops_id'), 'shops', ['id'], unique=False, schema='shop')
     op.create_table('ufos',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('tax_number', EncryptedType(), nullable=True),
-    sa.Column('Shaba_number',EncryptedType(), nullable=True),
-    sa.Column('national_code', EncryptedType(), nullable=True),
+    sa.Column('tax_number', utils.custom_types.EncryptedType(), nullable=True),
+    sa.Column('Shaba_number', utils.custom_types.EncryptedType(), nullable=True),
+    sa.Column('national_code', utils.custom_types.EncryptedType(), nullable=True),
+    sa.Column('mamad', sa.String(), nullable=True),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
@@ -97,6 +98,8 @@ def downgrade() -> None:
     op.drop_table('files', schema='file')
     op.drop_index(op.f('ix_ufo_ufos_id'), table_name='ufos', schema='ufo')
     op.drop_table('ufos', schema='ufo')
+    op.drop_index(op.f('ix_shop_shops_id'), table_name='shops', schema='shop')
     op.drop_table('shops', schema='shop')
+    op.drop_index(op.f('ix_account_users_id'), table_name='users', schema='account')
     op.drop_table('users', schema='account')
     # ### end Alembic commands ###

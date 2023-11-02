@@ -33,7 +33,6 @@ __all__ = ["logger"]
 log_directory = "logs"
 empty_log_files = glob.glob(os.path.join(log_directory, "*.log"))
 
-time.sleep(2)
 while True:
     try:
         for log_file in empty_log_files:

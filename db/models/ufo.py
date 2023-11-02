@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, Integer, ForeignKey, func
+from sqlalchemy import Column, DateTime, Integer, ForeignKey, func, String
 from sqlalchemy.orm import relationship
 
 from utils.tools import Tools
@@ -13,6 +13,7 @@ class Ufo(Base):
     tax_number    = Column(EncryptedType(), nullable=True)
     Shaba_number  = Column(EncryptedType(), nullable=True)
     national_code = Column(EncryptedType(), nullable=True)
+    mamad = Column(String)
 
     created_at = Column(DateTime(timezone=True), default=func.now())
     deleted_at = Column(DateTime(timezone=True), default=None)

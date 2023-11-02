@@ -1,8 +1,7 @@
-from sqlalchemy import Column, Integer, String, DateTime, func, Boolean, UniqueConstraint, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, func, Boolean, UniqueConstraint
 from .base import Base
 from sqlalchemy.orm import relationship
 import bcrypt
-from utils.tools import Tools
 
 class User(Base):
     __tablename__ = 'users'
@@ -12,11 +11,11 @@ class User(Base):
         UniqueConstraint('first_name', name='first_name'),
         UniqueConstraint('last_name', name='last_name'),
     )
-    id         = Column(Integer, primary_key=True)
+    id         = Column(Integer, primary_key=True, index=True)
     first_name = Column(String(30))
     last_name  = Column(String(30))
     email      = Column(String(100), unique=True ,nullable=True)
-    mobile     = Column(String(11), unique=True)
+    mobile     = Column(String(11) , unique=True)
     
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     deleted_at = Column(DateTime(timezone=True), default=None)
@@ -37,7 +36,6 @@ class User(Base):
         password_bytes = password.encode('utf-8')
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(password_bytes, salt)
-        # Convert the hashed password back to a string for storage
         return hashed_password.decode('utf-8')
 
     def check_password(stored_password: str, provided_password: str) -> bool:

@@ -1,6 +1,6 @@
 from config.configs import config
 import traceback
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.responses import JSONResponse
 from app.api import user
 from app.middlewares.Authentication import AuthenticateMiddleware
@@ -13,6 +13,7 @@ app.include_router(user.router)
 
 @app.exception_handler(Exception)
 async def exception_handler(request: Request, exc: Exception):
+    backgroundTasks = BackgroundTasks
     logger.exception("An unexpected error occurred")
     logger.debug(traceback.format_exc())
     return JSONResponse(

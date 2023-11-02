@@ -35,7 +35,7 @@ class AccessToken:
         credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
+        headers={"Authenticate": "Bearer"},
     )
         try:
             OAuth2PasswordBearer(tokenUrl=token)

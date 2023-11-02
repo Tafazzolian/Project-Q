@@ -8,7 +8,7 @@ class Shop(Base):
     __tablename__ = 'shops'
     __table_args__ = {'schema': 'shop'}
 
-    id         = Column(Integer,  primary_key=True)
+    id         = Column(Integer,  primary_key=True, index=True)
     email      = Column(String(100), nullable=True)
     phone      = Column(String(11) , nullable=True)
     address    = Column(String(500), nullable=True)

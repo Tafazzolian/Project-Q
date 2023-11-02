@@ -30,7 +30,7 @@ class UserService:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Incorrect username or password",
-                headers={"WWW-Authenticate": "Bearer"},
+                headers={"Authenticate": "Bearer"},
             )
         token = AccessToken()
         access_token = token.create_access_token(data={"sub": str(user.id)})
