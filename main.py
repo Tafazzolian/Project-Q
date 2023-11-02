@@ -1,6 +1,6 @@
 from config.configs import config
 import traceback
-from fastapi import FastAPI, Request, BackgroundTasks
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from app.api import user
 from app.middlewares.Authentication import AuthenticateMiddleware
@@ -13,8 +13,7 @@ app.include_router(user.router)
 
 @app.exception_handler(Exception)
 async def exception_handler(request: Request, exc: Exception):
-    backgroundTasks = BackgroundTasks
-    logger.exception("An unexpected error occurred")
+    logger.exception("An unexpected error occurred: %s" % str(exc))
     logger.debug(traceback.format_exc())
     return JSONResponse(
         status_code=500,
@@ -24,6 +23,15 @@ async def exception_handler(request: Request, exc: Exception):
 app.add_middleware(AuthenticateMiddleware)
 app.add_middleware(HeaderSecurityMiddleware)
 app.add_middleware(RateLimiter)
+
+#background tasks
+from apscheduler.schedulers.background import BackgroundScheduler
+from config.background_tasks import empty_log_cleaner
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(empty_log_cleaner, 'interval', minutes = 2)#,hours=6 , max)
+scheduler.start()
+# logger.critical("Fire start")
 
 if __name__ == "__main__":
     import uvicorn
