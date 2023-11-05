@@ -35,20 +35,6 @@ def get_current_user(request: Request, token: Optional[str] = None):
         token = request.state.token
     user_id = AccessToken().check_token(token, request)
     return user_id
-    
-
-def already_logged_in_check(request:Request):
-    if not request.state.token:
-        Tools.yellow(key="login_check:",text="no tokens found")
-        return None
-    else:
-        user_id = get_current_user(request=request, token = request.state.token)
-        if user_id:
-            Tools.green(key="login_check:",text="token approved")
-            return user_id
-        else:
-            Tools.red(key="login_check:",text="token failed")
-            return None
 
 
 # def current_user(request: Request):

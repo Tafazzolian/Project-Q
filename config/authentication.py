@@ -44,26 +44,32 @@ class AccessToken:
     
     def check_token(self, token, request):
         redis = request.app.state.redis
-        if redis.get(token):
+        ex_token = "ex" + token
+        if redis.get(ex_token):
             Tools.red(text="blocked_token Detected")
             return None
-        try:
-            OAuth2PasswordBearer(tokenUrl=token)
-            payload = jwt.decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])#, options={"verify_exp": False})
-            user_id: str = payload.get("sub")
-            if user_id is None:
-                raise self.credentials_exception
-            Tools.green(key="check_token:",text="token approved")
-            return user_id
-        except:
-            Tools.red(key="check_token:",text="failed to approve token")
+        
+        elif redis.get(token):
+            try:
+                OAuth2PasswordBearer(tokenUrl=token)
+                payload = jwt.decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])#, options={"verify_exp": False})
+                user_id: str = payload.get("sub")
+                if user_id is None:
+                    raise self.credentials_exception
+                Tools.green(key="check_token:",text="token approved")
+                return user_id
+            except:
+                Tools.red(key="check_token:",text="failed to approve token")
+                return None
+        else:
             return None
         
 
     def expire_token(self, token, redis):
         if lock.acquire(blocking=False):
             try:
-                redis.set(token,'dead-token',ex=1800)
+                ex_token = "ex" + token
+                redis.set(ex_token,'dead-token',ex=1800)
                 Tools.green(key="expire_token:",text="token expired")
             except:
                 Tools.red(key="expire_token:",text="failed to expire token")

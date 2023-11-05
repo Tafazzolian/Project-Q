@@ -1,4 +1,5 @@
 from fastapi import HTTPException, Request, status
+from fastapi.responses import JSONResponse
 from app.repositories.user_repo import UserRepository
 from db.models.user import User
 from config.authentication import AccessToken
@@ -23,19 +24,25 @@ class UserService:
             email=user_data["email"]
             )
 
-    def login_user(self, user_data: dict):
+    def login_user(self, user_data: dict, request):
         user = self.user_repository.get_user(user_data)
-
-        if not user or not User.check_password(provided_password=user_data["password"],stored_password=user.hashed_password):
+        if not User.check_password(provided_password=user_data["password"],stored_password=user.hashed_password):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Incorrect username or password",
                 headers={"Authenticate": "Bearer"},
             )
+        
         token = AccessToken()
         access_token = token.create_access_token(data={"sub": str(user.id)})
+        try:
+            redis = request.app.state.redis
+            redis.set(access_token,user.id,ex=1800)
+        except:
+            return JSONResponse({"error":"redis connection failed"}, status_code=404)
         return {"access_token": access_token, "token_type": "bearer", "user_id":user.id}
     
+
     def log_out(self,request:Request):
         token = request.state.token
         redis = request.app.state.redis

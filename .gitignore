@@ -4,6 +4,7 @@ __pypackages__/
 .pytest_cache
 
 *.log
+cache.db
 **/.DS_Store
 
 debug_cache/

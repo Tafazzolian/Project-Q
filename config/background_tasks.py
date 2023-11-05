@@ -1,11 +1,9 @@
 import glob
 import os
 from threading import Lock
-
 lock = Lock()
 
 def empty_log_cleaner():
-
     log_directory = "logs"
     log_files = glob.glob(os.path.join(log_directory, "*.log"))
     if lock.acquire(blocking=False):
