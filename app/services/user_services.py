@@ -1,4 +1,4 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException, Request, status
 from app.repositories.user_repo import UserRepository
 from db.models.user import User
 from config.authentication import AccessToken
@@ -35,3 +35,8 @@ class UserService:
         token = AccessToken()
         access_token = token.create_access_token(data={"sub": str(user.id)})
         return {"access_token": access_token, "token_type": "bearer", "user_id":user.id}
+    
+    def log_out(self,request:Request):
+        token = request.state.token
+        redis = request.app.state.redis
+        AccessToken().expire_token(token,redis)

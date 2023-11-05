@@ -2,18 +2,14 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from slowapi.util import get_remote_address
-import redis.asyncio as redis
 from utils.tools import Tools
-from config.configs import config
 from config.logs import logger
 
 class RateLimiter(BaseHTTPMiddleware):
-    redis_host: str=config.REDIS_HOST
-    redis_port: int=config.REDIS_PORT
-    redis_db: int = 0
-
+    
     async def dispatch(self, request: Request, call_next):
-        r = redis.Redis(host=self.redis_host, port=self.redis_port, db=self.redis_db, decode_responses=True,retry_on_timeout=True)
+        r = request.app.state.redis
+        
         Tools.green(key="Rate_limiter_middleware:",text="Rate-limiter middleware started.")
         client_ip = get_remote_address(request)
         limit = 10  # 10 requests

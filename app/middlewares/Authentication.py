@@ -5,6 +5,7 @@ from config.authentication import AccessToken
 from utils.tools import Tools
 
 
+
 class AuthenticateMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
@@ -21,7 +22,7 @@ class AuthenticateMiddleware(BaseHTTPMiddleware):
         
         protocol, _, token = authorization_header.partition(" ")
         request.state.token = token
-        user_id = access_token.check_token(token)
+        user_id = access_token.check_token(token , request)
         if user_id:
             request.state.user_id = user_id
             request.state.status = "Good_token"

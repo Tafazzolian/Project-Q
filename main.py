@@ -1,3 +1,4 @@
+import redis
 from config.configs import config
 import traceback
 from fastapi import FastAPI, Request
@@ -7,8 +8,23 @@ from app.middlewares.Authentication import AuthenticateMiddleware
 from app.middlewares.Header_security import HeaderSecurityMiddleware
 from app.middlewares.Rate_limiter import RateLimiter
 from config.logs import logger
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app:FastAPI):
+    redis_host: str=config.REDIS_HOST
+    redis_port: int=config.REDIS_PORT
+    redis_db: int = 0
+    r = redis.Redis(host=redis_host, port=redis_port, db=redis_db, decode_responses=True,retry_on_timeout=True)
+    app.state.redis = r
+    try:
+        yield
+    finally:
+        await r.close()
+
+app = FastAPI(lifespan=lifespan)
+
 app.include_router(user.router)
 
 @app.exception_handler(Exception)
@@ -24,7 +40,7 @@ app.add_middleware(AuthenticateMiddleware)
 app.add_middleware(HeaderSecurityMiddleware)
 app.add_middleware(RateLimiter)
 
-#background tasks
+#----------------------background tasks
 from apscheduler.schedulers.background import BackgroundScheduler
 from config.background_tasks import empty_log_cleaner
 

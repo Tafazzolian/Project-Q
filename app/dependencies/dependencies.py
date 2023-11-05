@@ -33,7 +33,7 @@ def get_user_service(repo: UserRepository = Depends(inject_session_to_repo)) -> 
 def get_current_user(request: Request, token: Optional[str] = None):
     if not token:
         token = request.state.token
-    user_id = AccessToken().check_token(token)
+    user_id = AccessToken().check_token(token, request)
     return user_id
     
 
@@ -48,7 +48,7 @@ def already_logged_in_check(request:Request):
             return user_id
         else:
             Tools.red(key="login_check:",text="token failed")
-            None
+            return None
 
 
 # def current_user(request: Request):
