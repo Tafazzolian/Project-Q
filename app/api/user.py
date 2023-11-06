@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status, Path
 from fastapi.responses import JSONResponse, RedirectResponse
 from app.services.user_services import UserService
+from app.services.otp_service import OtpService
 from app.schemas.request_models import GetUser, CreateUser, LoginUser
 from app.schemas.response_model import UserInfo
 from app.dependencies.dependencies import get_user_service, get_current_user
@@ -11,6 +12,7 @@ router = APIRouter(prefix="/account", tags=["account"])
 
 
 @router.post("/get",response_model=UserInfo)
+@login_check
 async def get_user(request_model: GetUser, user_service: UserService = Depends(get_user_service)):
     user_data = request_model.model_dump()
     user = await user_service.get_user(user_data)
@@ -25,12 +27,31 @@ async def get_all_users(request: Request, user_service: UserService = Depends(ge
     users = await user_service.get_all_users(request)
     return users
 
+@router.post("/otp/{mobile}")
+async def send_otp(mobile:str, request:Request):
+    if await OtpService(request).send(mobile=mobile):
+        return JSONResponse(
+            content={"detail": "code sent"},
+            status_code=status.HTTP_201_CREATED
+        )
+    return JSONResponse(
+            content={"detail": "couldn't send code"},
+            status_code=status.HTTP_409_CONFLICT
+        )
 
-@router.post("/register")
-async def create_user(request_model: CreateUser, user_service: UserService = Depends(get_user_service)):
+
+@router.post("/register/{mobile}")
+async def create_user(mobile:str, request:Request,request_model: CreateUser, user_service: UserService = Depends(get_user_service)):
     user_data = request_model.model_dump()
-    user = await user_service.create_user(user_data)
-    return user
+    user_data["mobile"] = mobile
+    if  await OtpService(request).verify_otp(mobile=user_data["mobile"],code=user_data["code"]):
+        user = await user_service.create_user(user_data)
+        return user
+    return JSONResponse(
+            content={"detail": "wrong otp"},
+            status_code=status.HTTP_400_BAD_REQUEST
+        )
+    
 
 
 @router.post("/login")

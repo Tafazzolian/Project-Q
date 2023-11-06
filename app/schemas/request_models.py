@@ -65,16 +65,16 @@ class CreateUser(BaseModel):
     first_name: str
     last_name: str
     email: Optional[str] = None
-    mobile: str
     password: str
+    code: str
 
-    @validator('mobile')
-    def mobile_check(cls, v):
-        try:
-            PhoneNumberValidator("body.mobile", v).validate()
-        except ValueError as e:
-            raise ValueError(str(e))
-        return v
+    # @validator('mobile')
+    # def mobile_check(cls, v):
+    #     try:
+    #         PhoneNumberValidator("body.mobile", v).validate()
+    #     except ValueError as e:
+    #         raise ValueError(str(e))
+    #     return v
 
     
     @validator('password')
