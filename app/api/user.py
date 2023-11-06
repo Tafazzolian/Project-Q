@@ -13,7 +13,7 @@ router = APIRouter(prefix="/account", tags=["account"])
 @router.post("/get",response_model=UserInfo)
 async def get_user(request_model: GetUser, user_service: UserService = Depends(get_user_service)):
     user_data = request_model.model_dump()
-    user = user_service.get_user(user_data)
+    user = await user_service.get_user(user_data)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
@@ -22,35 +22,14 @@ async def get_user(request_model: GetUser, user_service: UserService = Depends(g
 @router.get("/get-all",response_model=List[UserInfo])
 @login_check
 async def get_all_users(request: Request, user_service: UserService = Depends(get_user_service)):
-    # redis = request.app.state.redis
-    # cached_data, is_cached = await get_cache(redis, key="get_all_users")
-    
-    # if is_cached:
-    #     print('redis cache worked')
-    #     return cached_data  # Return the cached data if it exists
-    
-    # If not cached, get data from the database
     users = await user_service.get_all_users(request)
-    
-    # Cache the newly fetched data
-    #await set_cache(redis, key="get_all_users", value=users, ex=10)
-    
     return users
-    # if True in cache(key="get_all_users"):
-    #     return 
-    # if "get_all_users" in cache:
-    #     print('Cache hit')
-    #     return cache["get_all_users"]
-    # else:
-    #     users = user_service.get_all_users()
-    #     cache.set("get_all_users", users, expire=5)
-    #     return users
 
 
 @router.post("/register")
 async def create_user(request_model: CreateUser, user_service: UserService = Depends(get_user_service)):
     user_data = request_model.model_dump()
-    user = user_service.create_user(user_data)
+    user = await user_service.create_user(user_data)
     return user
 
 
@@ -73,7 +52,7 @@ async def login_for_access_token(request:Request,
 async def log_out(request:Request, user_service: UserService = Depends(get_user_service)):
 
     if request.state.status == "Good_token":
-        user_service.log_out(request=request)
+        await user_service.log_out(request=request)
         message = {"message": "Logged out successfully."}
         response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
     else:

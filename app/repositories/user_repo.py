@@ -17,14 +17,14 @@ class UserRepository:
 
     async def get_user(self,user_data):
         conditions = []
+        if "user_id" in user_data:
+            conditions.append(User.id        == user_data["user_id"])
         if "mobile" in user_data:
-            conditions.append(User.mobile == user_data["mobile"])
+            conditions.append(User.mobile    == user_data["mobile"])
+        if "email" in user_data:
+            conditions.append(User.email     == user_data["email"])
         if "last_name" in user_data:
             conditions.append(User.last_name == user_data["last_name"])
-        if "user_id" in user_data:
-            conditions.append(User.id == user_data["user_id"])
-        if "email" in user_data:
-            conditions.append(User.id == user_data["email"])
         
         if not conditions:
             return None
@@ -34,7 +34,6 @@ class UserRepository:
             select(User).filter(or_(*conditions)))#.options(selectinload(User.relationships)))
             user = result.scalars().first()
 
-        #user = self.db.query(User).filter(or_(*conditions)).first()
         return user
     
     @cache(key="get_all_users")
@@ -46,7 +45,7 @@ class UserRepository:
         return  users
     
 
-    def create_user(self, first_name, last_name, mobile, password, email=None):
+    async def create_user(self, first_name, last_name, mobile, password, email=None):
         user = User(
             first_name=first_name,
             last_name=last_name,
@@ -56,25 +55,25 @@ class UserRepository:
         )
         self.db.add(user)
         try:
-            self.db.commit()
-            self.db.refresh(user)
+            await self.db.commit()
+            await self.db.refresh(user)
             return user
         except SQLAlchemyError as e:
             error_info = str(e.__dict__['orig'])
-            self.db.rollback()
+            await self.db.rollback()
             return JSONResponse(content={"error": "Something went wrong", "detail": error_info},
                                 status_code=status.HTTP_409_CONFLICT)
 
 
-    def login_user(self, user_data):
-        conditions = []
-        if "mobile" in user_data:
-            conditions.append(User.mobile == user_data["mobile"])
-        if "email" in user_data:
-            conditions.append(User.id == user_data["email"])
+    # def login_user(self, user_data):
+    #     conditions = []
+    #     if "mobile" in user_data:
+    #         conditions.append(User.mobile == user_data["mobile"])
+    #     if "email" in user_data:
+    #         conditions.append(User.id == user_data["email"])
 
-        user = self.db.query(User).filter(or_(*conditions)).first()
-        return user
+    #     user = self.db.query(User).filter(or_(*conditions)).first()
+    #     return user
         
         
 

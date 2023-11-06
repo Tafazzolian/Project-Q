@@ -7,7 +7,6 @@ from config.logs import logger
 from redis.exceptions import ConnectionError
 
 
-
 class UserService:
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
@@ -29,10 +28,17 @@ class UserService:
 
     async def login_user(self, user_data: dict, request):
         user = await self.user_repository.get_user(user_data)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username",
+                headers={"Authenticate": "Bearer"},
+            )
+
         if not User.check_password(provided_password=user_data["password"],stored_password=user.hashed_password):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Incorrect username or password",
+                detail="Incorrect password",
                 headers={"Authenticate": "Bearer"},
             )
         
@@ -51,4 +57,4 @@ class UserService:
     async def log_out(self,request:Request):
         token = request.state.token
         redis = request.app.state.redis
-        AccessToken().expire_token(token,redis)
+        await AccessToken().expire_token(token,redis)

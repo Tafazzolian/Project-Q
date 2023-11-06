@@ -16,9 +16,9 @@ def login_check(func):
     async def wrapper(request: Request, *args, **kwargs):
         if not request.state.status == "Good_token":
             raise HTTPException(status_code=401, detail="Unauthorized Access")
-        print("Custom decorator called")
         return await func(request, *args, **kwargs)
     return wrapper
+
 # es = Elasticsearch("http://localhost:9200")
 
 # def generate_secret_key(length: int = 32) -> str:
@@ -53,12 +53,8 @@ class AccessToken:
     
     async def check_token(self, token, request):
         redis = request.app.state.redis
-        ex_token = "ex" + token
-        if await redis.get(ex_token):
-            Tools.red(text="blocked_token Detected")
-            return None
         
-        elif await redis.get(token):
+        if await redis.get(token):
             try:
                 OAuth2PasswordBearer(tokenUrl=token)
                 payload = jwt.decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])#, options={"verify_exp": False})
@@ -77,8 +73,7 @@ class AccessToken:
     async def expire_token(self, token, redis):
         if lock.acquire(blocking=False):
             try:
-                ex_token = "ex" + token
-                await redis.set(ex_token,'dead-token',ex=1800)
+                await redis.delete(token)
                 Tools.green(key="expire_token:",text="token expired")
             except:
                 Tools.red(key="expire_token:",text="failed to expire token")

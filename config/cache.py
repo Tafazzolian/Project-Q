@@ -1,20 +1,18 @@
 from datetime import datetime
 import json
 from diskcache import Cache
-from fastapi import Request
 from functools import wraps
 
 def as_dict(data):
     if isinstance(data, list):
         return [as_dict(item) for item in data]
-    # Otherwise, assume it's a single SQLAlchemy model instance
     return {
         c.name: getattr(data, c.name).isoformat() if isinstance(getattr(data, c.name), datetime) else getattr(data, c.name)
         for c in data.__table__.columns
     }
 
 
-def cache(key: str, expire: int = 1200):
+def cache(key: str, expire: int = 60):
     def decorator(func):
         @wraps(func)
         async def wrapper(*args, **kwargs):
