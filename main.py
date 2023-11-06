@@ -1,4 +1,4 @@
-import redis
+from redis.asyncio import Redis
 from config.configs import config
 import traceback
 from fastapi import FastAPI, Request
@@ -16,12 +16,13 @@ async def lifespan(app:FastAPI):
     redis_host: str=config.REDIS_HOST
     redis_port: int=config.REDIS_PORT
     redis_db: int = 0
-    r = redis.Redis(host=redis_host, port=redis_port, db=redis_db, decode_responses=True,retry_on_timeout=True)
+    r = await Redis(host=redis_host, port=redis_port, db=redis_db, decode_responses=True,retry_on_timeout=True)
     app.state.redis = r
     try:
         yield
     finally:
-        await r.close()
+        await app.state.redis.close()
+        
 
 app = FastAPI(lifespan=lifespan)
 

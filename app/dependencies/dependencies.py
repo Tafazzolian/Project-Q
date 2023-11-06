@@ -9,24 +9,28 @@ from config.authentication import AccessToken
 from utils.tools import Tools
 
 from db import models
-from database import SessionLocal, engine
-models.Base.metadata.create_all(bind=engine)
+from database import SessionLocal, engine, AsyncSessionLocal, async_engine
+from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 
-def get_db():
-    db = SessionLocal()
-    try:
+
+async def create_tables(engine: AsyncEngine):
+    async with engine.begin() as conn:
+        await conn.run_sync(models.Base.metadata.create_all)
+
+async def get_db() -> AsyncSession:
+    async with AsyncSessionLocal() as db:
         yield db
-    finally:
-        db.close()
 
-def inject_session_to_repo(db: Session = Depends(get_db)) -> UserRepository:
+async def inject_session_to_repo(db: AsyncSession = Depends(get_db)) -> UserRepository:
     """
     Provides an instance of UserRepository to be used as a dependency.
     """
     return UserRepository(db)
 
 
-def get_user_service(repo: UserRepository = Depends(inject_session_to_repo)) -> UserService:
+async def get_user_service(repo: UserRepository = Depends(inject_session_to_repo)) -> UserService:
     return UserService(repo)
 
 

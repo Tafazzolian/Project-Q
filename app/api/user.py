@@ -4,12 +4,11 @@ from app.services.user_services import UserService
 from app.schemas.request_models import GetUser, CreateUser, LoginUser
 from app.schemas.response_model import UserInfo
 from app.dependencies.dependencies import get_user_service, get_current_user
-from typing import List, Optional
-from config.cache import cache
-
-from db.models.user import User
+from typing import List
+from config.authentication import login_check
 
 router = APIRouter(prefix="/account", tags=["account"])
+
 
 @router.post("/get",response_model=UserInfo)
 async def get_user(request_model: GetUser, user_service: UserService = Depends(get_user_service)):
@@ -20,19 +19,32 @@ async def get_user(request_model: GetUser, user_service: UserService = Depends(g
     return user
 
 
-@router.get("/get-all", response_model=List[UserInfo])
-async def get_all_users(request:Request,user_service: UserService = Depends(get_user_service)):
-
-    if not request.state.status == "Good_token":
-        raise HTTPException(status_code=401, detail="Unauthorized_Access")
+@router.get("/get-all",response_model=List[UserInfo])
+@login_check
+async def get_all_users(request: Request, user_service: UserService = Depends(get_user_service)):
+    # redis = request.app.state.redis
+    # cached_data, is_cached = await get_cache(redis, key="get_all_users")
     
-    if "get_all_users" in cache:
-        print('cache worked')
-        return cache["get_all_users"]
-    else:
-        users = user_service.get_all_users()
-        cache.set("get_all_users",users,expire=5)
-        return users
+    # if is_cached:
+    #     print('redis cache worked')
+    #     return cached_data  # Return the cached data if it exists
+    
+    # If not cached, get data from the database
+    users = await user_service.get_all_users(request)
+    
+    # Cache the newly fetched data
+    #await set_cache(redis, key="get_all_users", value=users, ex=10)
+    
+    return users
+    # if True in cache(key="get_all_users"):
+    #     return 
+    # if "get_all_users" in cache:
+    #     print('Cache hit')
+    #     return cache["get_all_users"]
+    # else:
+    #     users = user_service.get_all_users()
+    #     cache.set("get_all_users", users, expire=5)
+    #     return users
 
 
 @router.post("/register")
@@ -53,13 +65,13 @@ async def login_for_access_token(request:Request,
             status_code=status.HTTP_400_BAD_REQUEST
         )
     user_data = request_model.model_dump()
-    user = user_service.login_user(user_data, request)
+    user = await user_service.login_user(user_data, request)
     return user
 
 
 @router.post("/logout")
-async def log_out(request:Request,
-                  user_service: UserService = Depends(get_user_service)):
+async def log_out(request:Request, user_service: UserService = Depends(get_user_service)):
+
     if request.state.status == "Good_token":
         user_service.log_out(request=request)
         message = {"message": "Logged out successfully."}

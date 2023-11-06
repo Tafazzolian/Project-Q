@@ -1,4 +1,5 @@
-from fastapi import HTTPException, status
+from functools import wraps
+from fastapi import HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from datetime import timedelta
@@ -10,6 +11,14 @@ from threading import Lock
 lock = Lock()
 
 
+def login_check(func):
+    @wraps(func)
+    async def wrapper(request: Request, *args, **kwargs):
+        if not request.state.status == "Good_token":
+            raise HTTPException(status_code=401, detail="Unauthorized Access")
+        print("Custom decorator called")
+        return await func(request, *args, **kwargs)
+    return wrapper
 # es = Elasticsearch("http://localhost:9200")
 
 # def generate_secret_key(length: int = 32) -> str:
@@ -42,14 +51,14 @@ class AccessToken:
         encoded_jwt = jwt.encode(to_encode, self.SECRET_KEY, algorithm=self.ALGORITHM)
         return encoded_jwt
     
-    def check_token(self, token, request):
+    async def check_token(self, token, request):
         redis = request.app.state.redis
         ex_token = "ex" + token
-        if redis.get(ex_token):
+        if await redis.get(ex_token):
             Tools.red(text="blocked_token Detected")
             return None
         
-        elif redis.get(token):
+        elif await redis.get(token):
             try:
                 OAuth2PasswordBearer(tokenUrl=token)
                 payload = jwt.decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])#, options={"verify_exp": False})
@@ -65,11 +74,11 @@ class AccessToken:
             return None
         
 
-    def expire_token(self, token, redis):
+    async def expire_token(self, token, redis):
         if lock.acquire(blocking=False):
             try:
                 ex_token = "ex" + token
-                redis.set(ex_token,'dead-token',ex=1800)
+                await redis.set(ex_token,'dead-token',ex=1800)
                 Tools.green(key="expire_token:",text="token expired")
             except:
                 Tools.red(key="expire_token:",text="failed to expire token")

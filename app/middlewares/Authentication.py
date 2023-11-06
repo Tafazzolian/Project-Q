@@ -21,7 +21,7 @@ class AuthenticateMiddleware(BaseHTTPMiddleware):
         protocol, _, token = authorization_header.partition(" ")
         request.state.token = token
 
-        if request.app.state.redis.get(token) and not request.app.state.redis.get("ex"+token):
+        if await request.app.state.redis.get(token) and not await request.app.state.redis.get("ex"+token):
             request.state.status = "Good_token"
             Tools.green(key="Authentication middleware:",text="token approved")
             return await call_next(request)

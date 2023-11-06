@@ -2,18 +2,20 @@ from sqlalchemy.orm import Session
 from db.models.user import User
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi.responses import JSONResponse
-from fastapi import status
+from fastapi import Request, status
 from sqlalchemy import or_, text
 
+from sqlalchemy.orm import selectinload
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+from config.cache import cache
+
+
 class UserRepository:
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         self.db = db
 
-    def get_user(self,user_data):
-#         query = text("""
-# SELECT * FROM account.users WHERE id=1
-# """)
-#         user = self.db.execute(query).fetchone()
+    async def get_user(self,user_data):
         conditions = []
         if "mobile" in user_data:
             conditions.append(User.mobile == user_data["mobile"])
@@ -25,14 +27,25 @@ class UserRepository:
             conditions.append(User.id == user_data["email"])
         
         if not conditions:
-            return None  # or raise an exception if you prefer
+            return None
         
-        user = self.db.query(User).filter(or_(*conditions)).first()
+        async with self.db:
+            result = await self.db.execute(
+            select(User).filter(or_(*conditions)))#.options(selectinload(User.relationships)))
+            user = result.scalars().first()
+
+        #user = self.db.query(User).filter(or_(*conditions)).first()
         return user
     
-    def get_all_users(self):
-        return self.db.query(User).all()
+    @cache(key="get_all_users")
+    async def get_all_users(self, request:Request):
+        async with self.db:
+            result = await self.db.execute(
+            select(User))
+            users = result.scalars().all()
+        return  users
     
+
     def create_user(self, first_name, last_name, mobile, password, email=None):
         user = User(
             first_name=first_name,

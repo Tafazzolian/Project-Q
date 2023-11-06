@@ -13,11 +13,11 @@ class RateLimiter(BaseHTTPMiddleware):
         
         Tools.green(key="Rate_limiter_middleware:",text="Rate-limiter middleware started.")
         client_ip = get_remote_address(request)
-        limit = 2      # 10 requests
+        limit = 10      # 10 requests
         interval = 60  # per 60 seconds
         try:
-            if redis.get(client_ip):
-                count = redis.get(client_ip)
+            if await redis.get(client_ip):
+                count = await redis.get(client_ip)
                 Tools.green(text="Redis connection success")
                 count = int(count)
                 if count >= limit: 
@@ -25,11 +25,11 @@ class RateLimiter(BaseHTTPMiddleware):
             else:
                 count = 0
 
-            pipeline = redis.pipeline()
+            pipeline = await redis.pipeline()
             pipeline.incr(client_ip)
             if count == 0:
                 pipeline.expire(client_ip, interval)
-            pipeline.execute()
+            await pipeline.execute()
 
             response = await call_next(request)
             return response
