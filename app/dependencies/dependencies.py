@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from app.repositories.user_repo import UserRepository
 from app.services.user_services import UserService
 from typing import Any, Optional
@@ -34,14 +34,17 @@ def get_user_service(repo: UserRepository = Depends(inject_session_to_repo)) -> 
     return UserService(repo)
 
 
-def get_current_user(request: Request, token: Optional[str] = None):
+async def get_current_user(request: Request, token: Optional[str] = None):
     if not token:
         token = request.state.token
-    user_id = AccessToken().check_token(token, request)
+    user_id = await AccessToken().check_token(token, request)
+    if not user_id:
+        raise HTTPException(status_code=404, detail="User not found")
+
     return user_id
 
 
-# def current_user(request: Request):
+# def get_current_user(request: Request):
 #     if request.state.user is None:
-#         raise ValidationException()
+#         raise HTTPException(status_code=404,detail="user not found")
 #     return request.state.user

@@ -10,7 +10,7 @@ class AuthenticateMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         Tools.green(key="Authentication middleware:",text=" started.")
         authorization_header = request.headers.get('Authorization')
-        request.state.user_id = None
+        # request.state.user_id = None
         request.state.token = None
 
         if authorization_header is None:

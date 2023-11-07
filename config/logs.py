@@ -9,6 +9,7 @@ import sys
 # Configure a logger for INFO level messages and above
 logger.add("logs/info_{time}.log", rotation="1 week", retention="1 month", level="INFO")
 
+
 # Configure a separate logger for WARNING level messages and above
 logger.add("logs/warning_{time}.log", rotation="1 week", retention="1 month", level="WARNING")
 

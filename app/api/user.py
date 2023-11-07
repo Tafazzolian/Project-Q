@@ -13,8 +13,8 @@ router = APIRouter(prefix="/account", tags=["account"])
 
 @router.post("/get",response_model=UserInfo)
 @login_check
-async def get_user(request_model: GetUser, user_service: UserService = Depends(get_user_service)):
-    user_data = request_model.model_dump()
+async def get_user(request: Request,request_model: GetUser, user_service: UserService = Depends(get_user_service)):
+    user_data = request_model.model_dump(exclude_unset=True)
     user = await user_service.get_user(user_data)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
@@ -55,11 +55,12 @@ async def create_user(mobile:str, request:Request,request_model: CreateUser, use
         )
 
 
-@router.put("/update-user/{mobile}")
-async def update_user(request:Request,request_model: UpdateUser, user_service: UserService = Depends(get_user_service)):
+@router.put("/update-user")
+async def update_user(request:Request,request_model: UpdateUser, user_service: UserService = Depends(get_user_service), current_user = Depends(get_current_user)):
     user_data = request_model.model_dump(exclude_unset=True)
-    if not user_data:
-        user = await user_service.update_user(user_data)
+    user_id =  current_user
+    if user_data and user_id:
+        user = await user_service.update_user(int(user_id), user_data)
         return user
     return JSONResponse(
             content={"detail": "you didn't change anything"},
@@ -77,7 +78,7 @@ async def login_for_access_token(request:Request,
             content={"detail": "You are already logged in."},
             status_code=status.HTTP_400_BAD_REQUEST
         )
-    user_data = request_model.model_dump()
+    user_data = request_model.model_dump(exclude_unset=True)
     user = await user_service.login_user(user_data, request)
     return user
 

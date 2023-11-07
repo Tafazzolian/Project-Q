@@ -22,12 +22,15 @@ def login_check(func):
 
 
 def admin_check(func):
-    from app.services.user_services import UserService
-    from app.dependencies.dependencies import get_user_service
     @wraps(func)
-    async def wrapper(request: Request, user_service: UserService = Depends(get_user_service), *args, **kwargs):
+    async def wrapper(request: Request, *args, **kwargs):
+        
         user_id = await AccessToken().check_token(request=request, token=request.state.token)
-        user = await user_service.get_user(user_data={"user_id": int(user_id)})
+        if user_id:
+            user = await kwargs["user_service"].get_user(user_data={"user_id": int(user_id)})
+            print(f'admin status:{user.is_admin}')
+        else:
+            raise HTTPException(status_code=401, detail="Unauthorized Access")
         if not user.is_admin:
             Tools.red(text="U R No Admin")
             raise HTTPException(status_code=401, detail="Unauthorized Access")

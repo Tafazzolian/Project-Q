@@ -8,3 +8,5 @@ class UserInfo(BaseModel):
     mobile: str
     membership: str
     email: Optional[str] = None
+    is_admin: bool
+    id: int

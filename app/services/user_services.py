@@ -27,8 +27,8 @@ class UserService:
             )
     
     
-    def update_user(self, user_data:dict):
-        return self.user_repository.update_user(user_data)
+    def update_user(self, user_id:int, user_data:dict):
+        return self.user_repository.update_user(user_id, user_data)
 
 
     async def login_user(self, user_data: dict, request):

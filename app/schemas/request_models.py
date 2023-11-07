@@ -90,7 +90,6 @@ class UpdateUser(BaseModel):
     last_name: Optional[str] = None
     email: Optional[str] = None
     mobile: Optional[str] = None
-    password: Optional[str] = None
     two_factor_authentication: Optional[bool] = False
     is_admin: Optional[bool] = False
 
@@ -101,12 +100,3 @@ class UpdateUser(BaseModel):
         except ValueError as e:
             raise ValueError(str(e))
         return v
-
-    @validator('password')
-    def password_strength_check(cls, v):
-        try:
-            PasswordStrentghCheck("body.password", v).validate()
-        except ValueError as e:
-            raise ValueError(f"Password is too weak: {', '.join(e.args[0])}")
-        return v
-
