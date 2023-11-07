@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status, Path
 from fastapi.responses import JSONResponse, RedirectResponse
 from app.services.user_services import UserService
 from app.services.otp_service import OtpService
-from app.schemas.request_models import GetUser, CreateUser, LoginUser
+from app.schemas.request_models import GetUser, CreateUser, LoginUser, UpdateUser
 from app.schemas.response_model import UserInfo
 from app.dependencies.dependencies import get_user_service, get_current_user
 from typing import List
-from config.authentication import login_check
+from config.authentication import admin_check, login_check
 
 router = APIRouter(prefix="/account", tags=["account"])
 
@@ -22,10 +22,12 @@ async def get_user(request_model: GetUser, user_service: UserService = Depends(g
 
 
 @router.get("/get-all",response_model=List[UserInfo])
+@admin_check
 @login_check
 async def get_all_users(request: Request, user_service: UserService = Depends(get_user_service)):
     users = await user_service.get_all_users(request)
     return users
+
 
 @router.post("/otp/{mobile}")
 async def send_otp(mobile:str, request:Request):
@@ -51,7 +53,18 @@ async def create_user(mobile:str, request:Request,request_model: CreateUser, use
             content={"detail": "wrong otp"},
             status_code=status.HTTP_400_BAD_REQUEST
         )
-    
+
+
+@router.put("/update-user/{mobile}")
+async def update_user(request:Request,request_model: UpdateUser, user_service: UserService = Depends(get_user_service)):
+    user_data = request_model.model_dump(exclude_unset=True)
+    if not user_data:
+        user = await user_service.update_user(user_data)
+        return user
+    return JSONResponse(
+            content={"detail": "you didn't change anything"},
+            status_code=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @router.post("/login")

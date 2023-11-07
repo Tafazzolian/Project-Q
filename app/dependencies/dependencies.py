@@ -30,7 +30,7 @@ async def inject_session_to_repo(db: AsyncSession = Depends(get_db)) -> UserRepo
     return UserRepository(db)
 
 
-async def get_user_service(repo: UserRepository = Depends(inject_session_to_repo)) -> UserService:
+def get_user_service(repo: UserRepository = Depends(inject_session_to_repo)) -> UserService:
     return UserService(repo)
 
 

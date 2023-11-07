@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from db.models.user import User
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi.responses import JSONResponse
-from fastapi import Request, status
+from fastapi import HTTPException, Request, status
 from sqlalchemy import or_, text
 
 from sqlalchemy.orm import selectinload
@@ -65,15 +65,25 @@ class UserRepository:
                                 status_code=status.HTTP_409_CONFLICT)
 
 
-    # def login_user(self, user_data):
-    #     conditions = []
-    #     if "mobile" in user_data:
-    #         conditions.append(User.mobile == user_data["mobile"])
-    #     if "email" in user_data:
-    #         conditions.append(User.id == user_data["email"])
+    async def update_user(self, user_id: int, update_data: dict):
+            query = select(User).where(User.id == user_id)
+            result = await self.db.execute(query)
+            user = result.scalars().first()
 
-    #     user = self.db.query(User).filter(or_(*conditions)).first()
-    #     return user
+            if not user:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+            for key, value in update_data.items():
+                setattr(user, key, value)
+
+            try:
+                await self.db.commit()
+                await self.db.refresh(user)
+                return user
+            except SQLAlchemyError as e:
+                error_info = str(e.__dict__['orig'])
+                await self.db.rollback()
+                raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Something went wrong: {error_info}")
         
         
 
