@@ -7,7 +7,7 @@ from database import DATABASE_URL
 from alembic import context
 from db.models.base import Base
 from db.models.ufo import Ufo
-from db.models.user import User
+from db.models.user import File
 from db.models.file import File
 from db.models.shop import Shop
 from logging.config import fileConfig

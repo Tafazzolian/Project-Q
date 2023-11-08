@@ -13,9 +13,6 @@ from .core_dependencies import get_repo_dependency
 async def get_user_service(repo: UserRepository = Depends(get_repo_dependency(UserRepository))):
     return UserService(repo)
 
-# async def get_user_service(repo: UserRepository = Depends(inject_session_to_repo(repository= UserRepository))) -> UserService:
-#     return UserService(repo)
-
 
 async def get_current_user(request: Request, token: Optional[str] = None):
     if not token:

@@ -7,6 +7,7 @@ __pypackages__/
 cache.db
 **/.DS_Store
 
+files/
 debug_cache/
 logs/
 qv/

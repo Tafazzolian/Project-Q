@@ -1,19 +1,57 @@
+import os
 import shutil
-from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile, status, Path
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile, status, Path
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from app.services.user_services import UserService
-from app.services.otp_services import OtpService
-from app.schemas.users_request_models import GetUser, CreateUser, LoginUser, UpdateUser
-from app.schemas.users_response_model import UserInfo
-from typing import List
+from app.services.file_services import FileService
+from app.schemas.files_request_model import CreateFile
+from app.dependencies.file_dependencies import get_file_service
+from typing import Dict, List
 from config.authentication import admin_check, login_check
 
 router = APIRouter(prefix="/file", tags=["file"])
 
 
 @router.post("/upload/")
-async def upload_file(file: UploadFile = File(...)):
-    # You can now save the file, process it, etc.
-    with open('destination/path/' + file.filename, 'wb') as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    return {"filename": file.filename}
+async def upload_file(
+    request:Request,
+    file: UploadFile = File(...),
+    file_name: str = Form(...),
+    user_id: int = Form(...),
+    link: str = Form(...),
+    s3_key: str = Form(...),
+    file_service:FileService = Depends(get_file_service)
+):
+    user_data: Dict[str, str] = {
+        "file_name": file.filename,
+        "user_id": user_id,
+        "link": link,
+        "s3_key": s3_key
+    }
+    
+    await file_service.create_file(request,file,user_data)
+    await file.close()
+    return {"filename": file_name, "user_data": user_data}
+
+
+@router.get("/download/{file_id}")
+async def download_file(file_id: str, file_service:FileService = Depends(get_file_service)):
+    file = await file_service.get_file(user_data={"file_id":int(file_id)})
+    if file is None:
+        raise HTTPException(status_code=404, detail="File not found")
+
+    # Here, we assume the file path is stored in the s3_key field, adjust as necessary
+    file_path = os.path.join('files/', file.file_name)
+    print(file.file_name)
+
+    # Check if the file exists in the storage
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found on server")
+
+    # Return the file using FileResponse which streams the file as a response
+    return FileResponse(path=file_path, filename=file.file_name, media_type='application/octet-stream')
+
+@router.get("/get-all-files")
+async def get_all_files(request: Request, file_service: FileService = Depends(get_file_service)):
+    files = await file_service.get_all_files(request)
+    return files

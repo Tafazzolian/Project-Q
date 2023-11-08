@@ -3,7 +3,7 @@ from db.models.user import User
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi.responses import JSONResponse
 from fastapi import HTTPException, Request, status
-from sqlalchemy import or_, text
+from sqlalchemy import delete, or_, text
 
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -66,24 +66,30 @@ class UserRepository:
 
 
     async def update_user(self, user_id: int, update_data: dict):
-            query = select(User).where(User.id == user_id)
-            result = await self.db.execute(query)
-            user = result.scalars().first()
+        query = select(User).where(User.id == user_id)
+        result = await self.db.execute(query)
+        user = result.scalars().first()
 
-            if not user:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        if not user:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
-            for key, value in update_data.items():
-                setattr(user, key, value)
+        for key, value in update_data.items():
+            setattr(user, key, value)
 
-            try:
-                await self.db.commit()
-                await self.db.refresh(user)
-                return user
-            except SQLAlchemyError as e:
-                error_info = str(e.__dict__['orig'])
-                await self.db.rollback()
-                raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Something went wrong: {error_info}")
+        try:
+            await self.db.commit()
+            await self.db.refresh(user)
+            return user
+        except SQLAlchemyError as e:
+            error_info = str(e.__dict__['orig'])
+            await self.db.rollback()
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Something went wrong: {error_info}")
+    
+
+    async def delete_user(self, user_data: dict):
+        user_id = user_data["user_id"]
+        query = delete(User).where(User.id == user_id)
+        await self.db.execute(query)
         
         
 

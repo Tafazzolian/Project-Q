@@ -1,3 +1,4 @@
+import json
 from redis.asyncio import Redis
 from config.configs import config
 import traceback
@@ -22,6 +23,11 @@ async def lifespan(app:FastAPI):
         yield
     finally:
         await app.state.redis.close()
+    #image/file processing worker in redis    
+    # while True:
+    #     job_data_json = r.brpop('file_queue')[1]
+    #     job_data = json.loads(job_data_json)
+    #     process_file(job_data)
         
 
 app = FastAPI(lifespan=lifespan)

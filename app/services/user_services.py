@@ -26,10 +26,11 @@ class UserService:
             email=user_data["email"]
             )
     
-    
     def update_user(self, user_id:int, user_data:dict):
         return self.user_repository.update_user(user_id, user_data)
-
+    
+    def delete_user(self,user_data:dict):
+        return self.user_repository.delete_user(user_data)
 
     async def login_user(self, user_data: dict, request):
         user = await self.user_repository.get_user(user_data)
