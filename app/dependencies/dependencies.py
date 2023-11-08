@@ -30,7 +30,7 @@ async def inject_session_to_repo(db: AsyncSession = Depends(get_db)) -> UserRepo
     return UserRepository(db)
 
 
-def get_user_service(repo: UserRepository = Depends(inject_session_to_repo)) -> UserService:
+async def get_user_service(repo: UserRepository = Depends(inject_session_to_repo)) -> UserService:
     return UserService(repo)
 
 
@@ -40,7 +40,6 @@ async def get_current_user(request: Request, token: Optional[str] = None):
     user_id = await AccessToken().check_token(token, request)
     if not user_id:
         raise HTTPException(status_code=404, detail="User not found")
-
     return user_id
 
 

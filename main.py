@@ -3,7 +3,7 @@ from config.configs import config
 import traceback
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from app.api import user
+from app.api import users,files,shops
 from app.middlewares.Authentication import AuthenticateMiddleware
 from app.middlewares.Header_security import HeaderSecurityMiddleware
 from app.middlewares.Rate_limiter import RateLimiter
@@ -26,7 +26,9 @@ async def lifespan(app:FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-app.include_router(user.router)
+app.include_router(users.router)
+app.include_router(shops.router)
+app.include_router(files.router)
 
 @app.exception_handler(Exception)
 async def exception_handler(request: Request, exc: Exception):

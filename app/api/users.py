@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status, Path
 from fastapi.responses import JSONResponse, RedirectResponse
 from app.services.user_services import UserService
-from app.services.otp_service import OtpService
-from app.schemas.request_models import GetUser, CreateUser, LoginUser, UpdateUser
-from app.schemas.response_model import UserInfo
+from app.services.otp_services import OtpService
+from app.schemas.users_request_models import GetUser, CreateUser, LoginUser, UpdateUser, Otp
+from app.schemas.users_response_model import UserInfo
 from app.dependencies.dependencies import get_user_service, get_current_user
 from typing import List
 from config.authentication import admin_check, login_check
@@ -29,8 +29,10 @@ async def get_all_users(request: Request, user_service: UserService = Depends(ge
     return users
 
 
-@router.post("/otp/{mobile}")
-async def send_otp(mobile:str, request:Request):
+@router.post("/otp")
+async def send_otp(request_model:Otp, request:Request):
+    user_data = request_model.model_dump()
+    mobile = user_data["mobile"]
     if await OtpService(request).send(mobile=mobile):
         return JSONResponse(
             content={"detail": "code sent"},

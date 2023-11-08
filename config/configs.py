@@ -7,7 +7,6 @@ load_dotenv()
 class Config(BaseSettings):
     DEBUG : bool = True
     FAKE_USER: str = ""
-    FAKE_EMPLOYEE: str = ""
     PORT :int = 8090
 
     # POSTGRES CONFIGS
@@ -28,15 +27,13 @@ class Config(BaseSettings):
     KAFKA_RULE_ENGINE_FLOW_REACTIVATION : str  = "rule_engine.flow_reactivation"
     KAFKA_TRAFFIC_PAIRED : str  = "time_attendance.traffic_paired"
 
-    # neo4j
-    NEO4J_URL : str  = "localhost:7687"
-    NEO4J_PASSWORD : str  = "password"
 
     # MONGODB CONFIGS
     MONGODB_URL : str  = ""
     MONGODB_DATABASE : str  = ""
     MONGODB_USERNAME : str  = ""
     MONGODB_PASSWORD : str  = ""
+
 
     # REDIS CONFIGS
     REDIS_HOST : str  = ""
@@ -56,7 +53,7 @@ class Config(BaseSettings):
     # kavenegar
     KAVENEGAR_ACCESS_KEY : str  = ""
 
-    #Auth
+    #Authentications
     SECRET_KEY : str  = ""
     ALGORITHM : str  = ""
     ACCESS_TOKEN_EXPIRE_MINUTES : str = ""

@@ -61,21 +61,25 @@ class GetUser(BaseModel):
             raise ValueError(str(e))
         return v
 
+
+class Otp(BaseModel):
+    mobile: str
+
+    @validator('mobile')
+    def mobile_check(cls, v):
+        try:
+            PhoneNumberValidator("body.mobile", v).validate()
+        except ValueError as e:
+            raise ValueError(str(e))
+        return v
+
+
 class CreateUser(BaseModel):
     first_name: str
     last_name: str
     email: Optional[str] = None
     password: str
     code: str
-
-    # @validator('mobile')
-    # def mobile_check(cls, v):
-    #     try:
-    #         PhoneNumberValidator("body.mobile", v).validate()
-    #     except ValueError as e:
-    #         raise ValueError(str(e))
-    #     return v
-
     
     @validator('password')
     def password_strength_check(cls, v):
