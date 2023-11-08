@@ -4,7 +4,7 @@ from app.services.user_services import UserService
 from app.services.otp_services import OtpService
 from app.schemas.users_request_models import GetUser, CreateUser, LoginUser, UpdateUser, Otp
 from app.schemas.users_response_model import UserInfo
-from app.dependencies.dependencies import get_user_service, get_current_user
+from app.dependencies.user_dependencies import get_user_service, get_current_user
 from typing import List
 from config.authentication import admin_check, login_check
 
@@ -86,13 +86,11 @@ async def login_for_access_token(request:Request,
 
 
 @router.post("/logout")
+@login_check
 async def log_out(request:Request, user_service: UserService = Depends(get_user_service)):
 
-    if request.state.status == "Good_token":
-        await user_service.log_out(request=request)
-        message = {"message": "Logged out successfully."}
-        response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
-    else:
-        message = {"message": "You are not logged in"}
-        response = RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    await user_service.log_out(request=request)
+    message = {"message": "Logged out successfully."}
+    response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+
     return message, response
