@@ -22,8 +22,8 @@ async def get_user(request: Request,request_model: GetUser, user_service: UserSe
 
 
 @router.get("/get-all",response_model=List[UserInfo])
-@admin_check
-@login_check
+# @admin_check
+# @login_check
 async def get_all_users(request: Request, user_service: UserService = Depends(get_user_service)):
     users = await user_service.get_all_users(request)
     return users

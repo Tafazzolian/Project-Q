@@ -7,6 +7,8 @@ __pypackages__/
 cache.db
 **/.DS_Store
 
+static/
+templates/
 files/
 debug_cache/
 logs/
