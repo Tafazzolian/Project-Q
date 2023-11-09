@@ -40,7 +40,7 @@ async def download_file(file_id: str, file_service:FileService = Depends(get_fil
     if file is None:
         raise HTTPException(status_code=404, detail="File not found")
 
-    # Here, we assume the file path is stored in the s3_key field, adjust as necessary
+    filename, file_extension = os.path.splitext(file.filename)
     file_path = os.path.join('files/', file.file_name)
     print(file.file_name)
 
