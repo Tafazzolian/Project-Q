@@ -10,10 +10,9 @@ from app.middlewares.Header_security import HeaderSecurityMiddleware
 from app.middlewares.Rate_limiter import RateLimiter
 from config.logs import logger
 from contextlib import asynccontextmanager
-from tortoise.contrib.fastapi import register_tortoise
 
 
-#----------------------redis connection and jobs-------------------------
+#----------------------redis connection and jobs----------------
 @asynccontextmanager
 async def lifespan(app:FastAPI):
     redis_host: str=config.REDIS_HOST
@@ -31,6 +30,7 @@ async def lifespan(app:FastAPI):
     #     job_data = json.loads(job_data_json)
     #     process_file(job_data)
 
+
 #----------------------routers and app------------------------
 app = FastAPI(lifespan=lifespan)
 
@@ -40,7 +40,7 @@ app.include_router(files.router)
 app.include_router(admin.router)
 
 
-#----------------------error logging-------------------------
+#----------------------error logging--------------------------
 @app.exception_handler(Exception)
 async def exception_handler(request: Request, exc: Exception):
     logger.exception("An unexpected error occurred: %s" % str(exc))
@@ -50,13 +50,14 @@ async def exception_handler(request: Request, exc: Exception):
         content={"detail": "Internal Server Error"},
     )
 
-#----------------------middlewares-------------------------
+
+#----------------------middlewares----------------------------
 app.add_middleware(AuthenticateMiddleware)
 app.add_middleware(HeaderSecurityMiddleware)
 #app.add_middleware(RateLimiter)
 
 
-#----------------------background tasks-------------------------
+#----------------------background tasks------------------------
 from apscheduler.schedulers.background import BackgroundScheduler
 from config.background_tasks import empty_log_cleaner
 
@@ -70,7 +71,7 @@ scheduler.start()
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 
+
 if __name__ == "__main__":
     import uvicorn
-
     uvicorn.run('main:app', host="0.0.0.0", port=config.PORT, reload=True)

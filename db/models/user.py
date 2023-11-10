@@ -41,3 +41,20 @@ class User(Base):
     def check_password(stored_password: str, provided_password: str) -> bool:
         password_match = bcrypt.checkpw(provided_password.encode('utf-8'), stored_password.encode('utf-8'))
         return password_match
+
+# from pydantic import BaseModel, Field
+
+
+# class UserSchema(BaseModel):
+#     id: int = Field(default=None, primary_key=True, nullable=False)
+#     first_name: str = Field(title="first_name")
+#     last_name: str = Field(title="last_name")
+#     mobile: str = Field(default="", title="Mobile")
+#     email: str = Field(default="", title="Mobile")
+#     membership: str = Field(default="Free", title="Mobile")
+#     is_admin: bool = Field(default=False, title="Admin_status")
+
+#     class Config:
+#         orm_mode = True
+
+    

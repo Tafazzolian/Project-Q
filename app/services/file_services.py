@@ -1,13 +1,8 @@
 import json
 import os
 import shutil
-from fastapi import HTTPException, Request, status
-from fastapi.responses import JSONResponse
+from fastapi import HTTPException, Request
 from app.repositories.file_repo import FileRepository
-from db.models.file import File
-from config.authentication import AccessToken
-from config.logs import logger
-from redis.exceptions import ConnectionError
 
 from utils.tools import Tools
 
@@ -26,7 +21,6 @@ class FileService:
     
 
     async def create_file(self, request,file,user_data: dict):
-        
         if not os.path.exists('files/'):
             os.makedirs('files/', exist_ok=True)
             
