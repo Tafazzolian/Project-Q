@@ -7,7 +7,7 @@ from app.dependencies.shop_dependencies import get_shop_service
 from app.services.file_services import FileService
 from app.services.user_services import UserService
 
-from app.static.template import templates
+from app.templates.template import templates
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 

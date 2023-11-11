@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: ec343e32294f
+Revision ID: 8fe30d384ace
 Revises: 
-Create Date: 2023-11-04 12:29:16.797743
+Create Date: 2023-11-11 06:39:59.049225
 
 """
 from typing import Sequence, Union
@@ -14,7 +14,7 @@ from utils.custom_types import EncryptedType
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'ec343e32294f'
+revision: str = '8fe30d384ace'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -46,7 +46,6 @@ def upgrade() -> None:
     sa.Column('tax_number', EncryptedType(), nullable=True),
     sa.Column('Shaba_number', EncryptedType(), nullable=True),
     sa.Column('national_code', EncryptedType(), nullable=True),
-    sa.Column('mamad', sa.String(), nullable=True),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
