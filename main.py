@@ -50,7 +50,6 @@ async def exception_handler(request: Request, exc: Exception):
         content={"detail": "Internal Server Error"},
     )
 
-
 #----------------------middlewares----------------------------
 app.add_middleware(AuthenticateMiddleware)
 app.add_middleware(HeaderSecurityMiddleware)

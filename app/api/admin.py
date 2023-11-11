@@ -20,10 +20,10 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 #         raise HTTPException(status_code=404, detail="User not found")
 #     return user
 
-@router.get("/", response_class=HTMLResponse)
-async def get_admin_panel(request: Request):
-    # Use the corresponding HTML file as the template
-    return templates.TemplateResponse("index.html", {"request": request})
+# @router.get("/", response_class=HTMLResponse)
+# async def get_admin_panel(request: Request):
+#     # Use the corresponding HTML file as the template
+#     return templates.TemplateResponse("index.html", {"request": request})
 
 @router.get("/products", response_class=HTMLResponse)
 async def get_admin_panel(request: Request):
@@ -32,7 +32,7 @@ async def get_admin_panel(request: Request):
 
 
 @router.get("/{model}", response_class=HTMLResponse)
-async def read_data(model:str,
+async def admin_panel(model:str,
                     request: Request,
                     user_service: UserService = Depends(get_user_service),
                     file_service: FileService = Depends(get_file_service),
@@ -51,5 +51,6 @@ async def read_data(model:str,
         data = await shop_service.get_all_shops(request)
         _type = "shop"
     else:
-        data = _type = None
+        data = []
+        _type = "user"
     return templates.TemplateResponse("admin.html", {"request": request, "data": data,"type":_type})

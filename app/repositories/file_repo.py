@@ -7,6 +7,7 @@ from sqlalchemy import delete, or_, text
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from config.cache import cache
+from utils.tools import Tools
 
 
 class FileRepository:
@@ -45,22 +46,24 @@ class FileRepository:
     
 
     async def create_file(self, file_name, user_id,link=None, s3_key=None):
-        user = File(
+        file = File(
             file_name=file_name,
             link=link,
             s3_key=s3_key,
             user_id=user_id
         )
-        self.db.add(user)
+        Tools.red(text="cf1")
+        self.db.add(file)
         try:
             await self.db.commit()
-            await self.db.refresh(user)
-            return user
+            await self.db.refresh(file)
+            Tools.green(text="file saved in the db")
+            return file
         except SQLAlchemyError as e:
             error_info = str(e.__dict__['orig'])
+            Tools.red(text=error_info)
             await self.db.rollback()
-            return JSONResponse(content={"error": "Something went wrong", "detail": error_info},
-                                status_code=status.HTTP_409_CONFLICT)
+            return HTTPException(status_code=status.HTTP_409_CONFLICT, detail=error_info)
 
 
     async def update_file(self, file_id: int, update_data: dict):
@@ -84,6 +87,7 @@ class FileRepository:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Something went wrong: {error_info}")
     
     async def delete_file(self, user_data: dict):
-        user_id = user_data["user_id"]
-        query = delete(File).where(File.id == user_id)
+        file_id = user_data["file_id"]
+        query = delete(File).where(File.id == file_id)
         await self.db.execute(query)
+        Tools.red(text=f'{query.file_name} deleted.')

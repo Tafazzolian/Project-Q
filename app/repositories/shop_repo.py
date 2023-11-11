@@ -20,11 +20,11 @@ class ShopRepository:
         if "id" in user_data:
             conditions.append(Shop.id      == user_data["id"])
         if "user_id" in user_data:
-            conditions.append(Shop.user_id       == user_data["user_id"])
+            conditions.append(Shop.user_id == user_data["user_id"])
         if "shop_name" in user_data:
             conditions.append(Shop.shop_name    == user_data["shop_name"])
         if "email" in user_data:
-            conditions.append(Shop.email     == user_data["email"])
+            conditions.append(Shop.email   == user_data["email"])
         if "phone" in user_data:
             conditions.append(Shop.phone == user_data["phone"])
         
@@ -34,14 +34,14 @@ class ShopRepository:
         async with self.db:
             result = await self.db.execute(
             select(Shop).filter(or_(*conditions)))#.options(selectinload(User.relationships)))
-            user = result.scalars().first()
+            shop = result.scalars().first()
 
-        return user
+        return shop
     
     @cache(key="get_all_shops")
     async def get_all_shops(self, request:Request):
         async with self.db:
             result = await self.db.execute(
             select(Shop))
-            users = result.scalars().all()
-        return  users
+            shops = result.scalars().all()
+        return  shops

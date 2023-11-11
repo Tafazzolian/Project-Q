@@ -41,7 +41,7 @@ class FileService:
         await redis_conn.lpush('file_queue', json.dumps(job_data))
         Tools.yellow(text="file added to redis que")
 
-        return self.file_repository.create_file(
+        return await self.file_repository.create_file(
             file_name=user_data["file_name"],
             user_id = user_data["user_id"],
             link=user_data["link"],
