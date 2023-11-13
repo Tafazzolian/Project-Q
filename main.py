@@ -4,7 +4,7 @@ from config.configs import config
 import traceback
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from app.api import users,files,shops,admin
+from app.api import users,files,shops,admin,ufos
 from app.middlewares.Authentication import AuthenticateMiddleware
 from app.middlewares.Header_security import HeaderSecurityMiddleware
 from app.middlewares.Rate_limiter import RateLimiter
@@ -37,6 +37,7 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(users.router)
 app.include_router(shops.router)
 app.include_router(files.router)
+app.include_router(ufos.router)
 app.include_router(admin.router)
 
 

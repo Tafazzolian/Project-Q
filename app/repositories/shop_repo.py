@@ -34,7 +34,7 @@ class ShopRepository:
         async with self.db:
             result = await self.db.execute(
             select(Shop).filter(or_(*conditions)))#.options(selectinload(User.relationships)))
-            shop = result.scalars().first()
+            shop = result.scalars().all()
 
         return shop
     
@@ -45,3 +45,23 @@ class ShopRepository:
             select(Shop))
             shops = result.scalars().all()
         return  shops
+    
+    async def create_shop(self, user_data:dict):
+        shop = Shop(
+            shop_name = user_data['shop_name'],
+            address = user_data['address'],
+            postal_code = user_data['postal_code'],
+            phone = user_data['phone'],
+            user_id = user_data['user_id'],
+            email = user_data['email']
+        )
+        self.db.add(shop)
+        try:
+            await self.db.commit()
+            await self.db.refresh(shop)
+            return shop
+        except SQLAlchemyError as e:
+            error_info = str(e.__dict__['orig'])
+            await self.db.rollback()
+            return JSONResponse(content={"error": "Something went wrong", "detail": error_info},
+                                status_code=status.HTTP_409_CONFLICT)

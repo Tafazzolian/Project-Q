@@ -25,10 +25,10 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 #     # Use the corresponding HTML file as the template
 #     return templates.TemplateResponse("index.html", {"request": request})
 
-@router.get("/products", response_class=HTMLResponse)
+@router.get("/login", response_class=HTMLResponse)
 async def get_admin_panel(request: Request):
     # Use the corresponding HTML file as the template
-    return templates.TemplateResponse("products.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @router.get("/{model}", response_class=HTMLResponse)

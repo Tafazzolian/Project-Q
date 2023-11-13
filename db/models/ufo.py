@@ -18,8 +18,8 @@ class Ufo(Base):
     deleted_at = Column(DateTime(timezone=True), default=None)
     updated_at = Column(DateTime(timezone=True), onupdate=func.now(), default=None)
 
-    user_id       = Column(Integer, ForeignKey('account.users.id'))
-    users = relationship('User', back_populates='ufo')
+    user_id    = Column(Integer, ForeignKey('account.users.id'))
+    users      = relationship('User', back_populates='ufo')
     
     
 

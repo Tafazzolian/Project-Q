@@ -15,7 +15,6 @@ class Shop(Base):
     shop_name  = Column(String(200), nullable=True)
     postal_code= Column(String(20) , nullable=True)
 
-
     created_at = Column(DateTime(timezone=True), default=func.now())
     deleted_at = Column(DateTime(timezone=True), default=None)
     updated_at = Column(DateTime(timezone=True), onupdate=func.now(), default=None)

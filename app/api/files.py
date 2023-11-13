@@ -23,8 +23,8 @@ async def upload_file(
     file_service:FileService = Depends(get_file_service)
 ):
     user_data: Dict[str, str] = {
-        "file_name": file.filename,
-        "user_id": user_id,
+        "file_name": file.filename,#uniq name
+        "user_id": user_id,#get user from token
         "link": link,
         "s3_key": s3_key
     }
@@ -34,7 +34,7 @@ async def upload_file(
     return {"filename": file_name, "user_data": user_data}
 
 
-@router.get("/download/{file_id}")
+@router.get("/download/{file_id}")#file_id must change to file link
 async def download_file(file_id: str, file_service:FileService = Depends(get_file_service)):
     file = await file_service.get_file(user_data={"file_id":int(file_id)})
     if file is None:

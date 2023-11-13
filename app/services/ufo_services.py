@@ -17,3 +17,6 @@ class UfoService:
 
     def get_all_ufos(self, request:Request):
         return self.ufo_repository.get_all_ufos(request=request)
+    
+    def create_ufo(self,user_data:dict):
+        return self.ufo_repository.create_ufo(user_data)

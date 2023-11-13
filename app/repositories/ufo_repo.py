@@ -17,15 +17,11 @@ class UfoRepository:
 
     async def get_ufo(self,user_data):
         conditions = []
-        if "id" in user_data:
-            conditions.append(Ufo.id        == user_data["id"])
-        if "tax" in user_data:
-            conditions.append(Ufo.tax_number    == user_data["tax"])
+        if "user_id" in user_data:
+            conditions.append(Ufo.id        == user_data["user_id"])
         if "national_code" in user_data:
             conditions.append(Ufo.national_code     == user_data["national_code"])
-        if "shaba" in user_data:
-            conditions.append(Ufo.Shaba_number == user_data["shaba"])
-        
+
         if not conditions:
             return None
         
@@ -43,3 +39,22 @@ class UfoRepository:
             select(Ufo))
             users = result.scalars().all()
         return  users
+    
+        
+    async def create_ufo(self, user_data:dict):
+        ufo = Ufo(
+            tax_number = user_data['tax_number'],
+            Shaba_number = user_data['Shaba_number'],
+            national_code = user_data['national_code'],
+            user_id = user_data['user_id']
+        )
+        self.db.add(ufo)
+        try:
+            await self.db.commit()
+            await self.db.refresh(ufo)
+            return ufo
+        except SQLAlchemyError as e:
+            error_info = str(e.__dict__['orig'])
+            await self.db.rollback()
+            return JSONResponse(content={"error": "Something went wrong", "detail": error_info},
+                                status_code=status.HTTP_409_CONFLICT)
