@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status, Path
 from fastapi.responses import JSONResponse, RedirectResponse
 from app.services.user_services import UserService
 from app.services.otp_services import OtpService
-from app.schemas.users_request_models import GetUser, CreateUser, LoginUser, UpdateUser, Otp
-from app.schemas.users_response_model import UserInfo
+from app.schemas.users_request_models import GetUser, CreateUser, LoginUser, UpdateUser
+from app.schemas.users_response_models import UserInfo
 from app.dependencies.user_dependencies import get_user_service, get_current_user
 from typing import List
 from config.authentication import admin_check, login_check
@@ -27,21 +27,6 @@ async def get_user(request: Request,request_model: GetUser, user_service: UserSe
 async def get_all_users(request: Request, user_service: UserService = Depends(get_user_service)):
     users = await user_service.get_all_users(request)
     return users
-
-
-@router.post("/otp")
-async def send_otp(request_model:Otp, request:Request):
-    user_data = request_model.model_dump()
-    mobile = user_data["mobile"]
-    if await OtpService(request).send(mobile=mobile):
-        return JSONResponse(
-            content={"detail": "code sent"},
-            status_code=status.HTTP_201_CREATED
-        )
-    return JSONResponse(
-            content={"detail": "couldn't send code"},
-            status_code=status.HTTP_409_CONFLICT
-        )
 
 
 @router.post("/register/{mobile}")

@@ -18,9 +18,9 @@ class UfoRepository:
     async def get_ufo(self,user_data):
         conditions = []
         if "user_id" in user_data:
-            conditions.append(Ufo.id        == user_data["user_id"])
+            conditions.append(Ufo.id            == user_data["user_id"])
         if "national_code" in user_data:
-            conditions.append(Ufo.national_code     == user_data["national_code"])
+            conditions.append(Ufo.national_code == user_data["national_code"])
 
         if not conditions:
             return None

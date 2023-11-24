@@ -3,8 +3,8 @@ from fastapi.responses import JSONResponse, RedirectResponse
 from app.dependencies.user_dependencies import get_current_user
 from app.services.ufo_services import UfoService
 from app.services.otp_services import OtpService
-from app.schemas.ufos_response_model import GetUfo,CreateUfo
-from app.schemas.users_response_model import UserInfo
+from app.schemas.ufos_response_models import GetUfo,CreateUfo
+from app.schemas.users_response_models import UserInfo
 from typing import List
 from config.authentication import admin_check, login_check
 from app.dependencies.ufo_dependencies import get_ufo_service
@@ -21,6 +21,7 @@ async def get_ufo(request:Request,request_model:GetUfo , ufo_service: UfoService
     if ufo is None:
         raise HTTPException(status_code=404, detail="User information not found")
     return ufo
+
 
 @router.post("/create")
 async def create_ufo(request:Request,request_model: CreateUfo, ufo_service: UfoService = Depends(get_ufo_service)):

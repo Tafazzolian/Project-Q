@@ -1,6 +1,7 @@
 import re
 from .abstract_validator import AbstractValidator
 from password_strength import PasswordPolicy
+from app.services.financial_services import BankService
 
 class PhoneNumberValidator(AbstractValidator):
     def __init__(self, loc: str, phone_number: str):
@@ -13,6 +14,21 @@ class PhoneNumberValidator(AbstractValidator):
     def passes(self) -> bool:
         if re.match(r"^(0)?9\d{9}$", self.phone_number) is None:
             raise ValueError("Invalid phone number format")
+        return True
+
+
+class BankAccountNumberValidator(AbstractValidator):
+    def __init__(self, loc: str, bank:str,account_number: str):
+        self.account_number = account_number
+        self.bank = bank
+        super().__init__(loc)
+
+    def type(self) -> str:
+        return "invalid_account_number"
+
+    def passes(self) -> bool:
+        if  not BankService.bank_account_to_shaba(self.bank,self.account_number):
+            raise ValueError("Invalid account number")
         return True
 
 

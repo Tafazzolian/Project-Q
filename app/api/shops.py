@@ -3,8 +3,8 @@ from fastapi.responses import JSONResponse, RedirectResponse
 from app.dependencies.user_dependencies import get_current_user
 from app.services.shop_services import ShopService
 from app.services.otp_services import OtpService
-from app.schemas.shops_request_model import GetShopRequestModel, CreateShopRequestModel
-from app.schemas.users_response_model import UserInfo
+from app.schemas.shops_request_models import GetShopRequestModel, CreateShopRequestModel
+from app.schemas.users_response_models import UserInfo
 from typing import List
 from config.authentication import admin_check, login_check
 from app.dependencies.shop_dependencies import get_shop_service

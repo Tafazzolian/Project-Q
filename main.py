@@ -4,7 +4,7 @@ from config.configs import config
 import traceback
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from app.api import users,files,shops,admin,ufos
+from app.api import users,files,shops,admin,ufos, services
 from app.middlewares.Authentication import AuthenticateMiddleware
 from app.middlewares.Header_security import HeaderSecurityMiddleware
 from app.middlewares.Rate_limiter import RateLimiter
@@ -39,6 +39,7 @@ app.include_router(shops.router)
 app.include_router(files.router)
 app.include_router(ufos.router)
 app.include_router(admin.router)
+app.include_router(services.router)
 
 
 #----------------------error logging--------------------------
@@ -50,6 +51,7 @@ async def exception_handler(request: Request, exc: Exception):
         status_code=500,
         content={"detail": "Internal Server Error"},
     )
+
 
 #----------------------middlewares----------------------------
 app.add_middleware(AuthenticateMiddleware)
@@ -69,7 +71,6 @@ scheduler.start()
 
 #-------------------templates and static files-----------------
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
-
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, Uplo
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from app.services.user_services import UserService
 from app.services.file_services import FileService
-from app.schemas.files_request_model import CreateFile
+from app.schemas.files_request_models import CreateFile
 from app.dependencies.file_dependencies import get_file_service
 from typing import Dict, List
 from config.authentication import admin_check, login_check
